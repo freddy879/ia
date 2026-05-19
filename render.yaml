@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: fivi-api
+    env: python
+    region: frankfurt
+    plan: standard
+
+    buildCommand: pip install -r requirements.txt
+
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --worker-class sync --timeout 60
+
+    envVars:
+      - key: FLASK_ENV
+        value: production
+
+      - key: PORT
+        value: "5000"
+
+      - key: RENDER_URL
+        value: https://bazar-bellita.onrender.com
+
+      - key: API_URL
+        value: https://bazar-bellita.onrender.com
+
+    autoDeploy: true
+
+    disk:
+      name: fivi-db
+      mountPath: /data
+      sizeGB: 1
