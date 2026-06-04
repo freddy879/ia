@@ -1,33 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bot Keep-Alive Render</title>
+  <style>
+    :root {
+      --color-background-primary: #131920;
+      --color-background-secondary: #1e2732;
+      --color-background-tertiary: #485460;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #95a5a6;
+      --color-text-success: #2ecc71;
+      --color-text-danger: #e74c3c;
+      --border-radius-md: 8px;
+      --font-mono: 'Courier New', Courier, monospace;
+    }
 
-<h2 class="sr-only">Bot keep-alive para Render — envía ping cada 1 minutos para mantener el servidor activo</h2>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--color-background-primary);
+      color: var(--color-text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-<div style="padding: 1.5rem 0;">
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:1.5rem;">
-    <div id="dot" style="width:10px;height:10px;border-radius:50%;background:var(--color-background-tertiary);transition:background 0.4s;"></div>
-    <span id="status" style="font-size:14px;color:var(--color-text-secondary);">Inactivo</span>
-  </div>
+    .container {
+      background: var(--color-background-secondary);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 550px;
+      box-sizing: border-box;
+    }
 
-  <div style="display:flex;gap:8px;margin-bottom:1.5rem;">
-    <input id="url" type="text" placeholder="https://tu-app.onrender.com/health" style="flex:1;font-size:14px;" />
-    <button id="btnStart" onclick="toggleBot()" style="white-space:nowrap;">Iniciar</button>
-  </div>
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: var(--color-text-primary);
+      border-bottom: 1px solid var(--color-background-tertiary);
+      padding-bottom: 10px;
+    }
 
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;">
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;">
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">Pings enviados</div>
-      <div id="count" style="font-size:22px;font-weight:500;">0</div>
+    input[type="text"] {
+      flex: 1;
+      background: var(--color-background-primary);
+      border: 1px solid var(--color-background-tertiary);
+      color: var(--color-text-primary);
+      padding: 10px 14px;
+      border-radius: var(--border-radius-md);
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #3498db;
+    }
+
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--border-radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    button.active {
+      background: var(--color-text-danger);
+    }
+
+    button.active:hover {
+      background: #c0392b;
+    }
+
+    .grid-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-md);
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .stat-title {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    #log {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-md);
+      padding: 1rem;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      max-height: 180px;
+      overflow-y: auto;
+      color: var(--color-text-secondary);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    #log div {
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Bot Keep-Alive — Pings cada 7 minutos para Render</h2>
+
+  <div style="padding: 0.5rem 0;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:1.5rem;">
+      <div id="dot" style="width:12px;height:12px;border-radius:50%;background:var(--color-background-tertiary);transition:background 0.4s;"></div>
+      <span id="status" style="font-size:14px;color:var(--color-text-secondary);">Inactivo</span>
     </div>
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;">
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">Último estado</div>
-      <div id="lastStatus" style="font-size:22px;font-weight:500;">—</div>
-    </div>
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;">
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">Próximo ping</div>
-      <div id="countdown" style="font-size:22px;font-weight:500;">—</div>
-    </div>
-  </div>
 
-  <div id="log" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;font-size:12px;font-family:var(--font-mono);max-height:180px;overflow-y:auto;color:var(--color-text-secondary);"></div>
+    <div style="display:flex;gap:8px;margin-bottom:1.5rem;">
+      <input id="url" type="text" placeholder="https://tu-app.onrender.com/deudas" />
+      <button id="btnStart" onclick="toggleBot()">Iniciar</button>
+    </div>
+
+    <div class="grid-stats">
+      <div class="stat-card">
+        <div class="stat-title">Pings enviados</div>
+        <div id="count" class="stat-value">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Último estado</div>
+        <div id="lastStatus" class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Próximo ping</div>
+        <div id="countdown" class="stat-value">—</div>
+      </div>
+    </div>
+
+    <div id="log"></div>
+  </div>
 </div>
 
 <script>
@@ -37,15 +170,33 @@ let countdownTimer = null;
 let pingCount = 0;
 let secondsLeft = 0;
 
-const INTERVAL = 1* 60;
+// Configurado a 7 minutos (7 * 60 segundos)
+const INTERVAL = 7 * 60; 
+
+// Cargar la URL automáticamente si existe en el almacenamiento del navegador
+window.addEventListener('DOMContentLoaded', () => {
+  const urlGuardada = localStorage.getItem('bot_render_url');
+  if (urlGuardada) {
+    document.getElementById('url').value = urlGuardada;
+    log(`URL recuperada de la memoria: ${urlGuardada}`);
+  }
+});
 
 function log(msg, ok) {
   const el = document.getElementById('log');
   const line = document.createElement('div');
   const ts = new Date().toLocaleTimeString();
-  line.style.color = ok === false ? 'var(--color-text-danger)' : ok === true ? 'var(--color-text-success)' : 'var(--color-text-secondary)';
+  
+  if (ok === true) line.style.color = varText('success');
+  else if (ok === false) line.style.color = varText('danger');
+  else line.style.color = varText('secondary');
+  
   line.textContent = `[${ts}] ${msg}`;
   el.prepend(line);
+}
+
+function varText(type) {
+  return getComputedStyle(document.documentElement).getPropertyValue(`--color-text-${type}`).trim();
 }
 
 async function doPing() {
@@ -53,19 +204,21 @@ async function doPing() {
   if (!url) return;
   try {
     const start = Date.now();
-    const r = await fetch(url, { mode: 'no-cors' });
+    // Usamos no-cors para evitar problemas de bloqueo de origen cruzado
+    await fetch(url, { mode: 'no-cors' }); 
     const ms = Date.now() - start;
+    
     pingCount++;
     document.getElementById('count').textContent = pingCount;
     document.getElementById('lastStatus').textContent = '✓';
-    document.getElementById('lastStatus').style.color = 'var(--color-text-success)';
+    document.getElementById('lastStatus').style.color = varText('success');
     log(`Ping OK (~${ms}ms) → ${url}`, true);
   } catch(e) {
     pingCount++;
     document.getElementById('count').textContent = pingCount;
     document.getElementById('lastStatus').textContent = '✗';
-    document.getElementById('lastStatus').style.color = 'var(--color-text-danger)';
-    log(`Error: ${e.message}`, false);
+    document.getElementById('lastStatus').style.color = varText('danger');
+    log(`Error en Ping: ${e.message}`, false);
   }
 }
 
@@ -77,31 +230,50 @@ function startCountdown() {
     const m = Math.floor(secondsLeft / 60);
     const s = secondsLeft % 60;
     document.getElementById('countdown').textContent = `${m}:${s.toString().padStart(2,'0')}`;
-    if (secondsLeft <= 0) secondsLeft = INTERVAL;
+    if (secondsLeft <= 0) {
+      secondsLeft = INTERVAL;
+    }
   }, 1000);
 }
 
 function toggleBot() {
   const url = document.getElementById('url').value.trim();
+  const btn = document.getElementById('btnStart');
+  
   if (!running) {
-    if (!url) { log('Ingresa la URL primero', false); return; }
+    if (!url) { log('Ingresa una URL válida primero', false); return; }
+    
+    // Guardar la URL en LocalStorage para que persista tras apagar la PC
+    localStorage.setItem('bot_render_url', url);
+
     running = true;
-    document.getElementById('btnStart').textContent = 'Detener';
-    document.getElementById('dot').style.background = '#1D9E75';
-    document.getElementById('status').textContent = 'Activo — ping cada 1 min';
-    log(`Iniciado → ${url}`);
+    btn.textContent = 'Detener';
+    btn.classList.add('active');
+    document.getElementById('dot').style.background = varText('success');
+    document.getElementById('status').textContent = 'Activo — ejecutando cada 7 min';
+    
+    log(`Monitoreo iniciado y guardado de forma local.`);
     doPing();
     startCountdown();
-    timer = setInterval(() => { doPing(); startCountdown(); }, INTERVAL * 1000);
+    
+    timer = setInterval(() => { 
+      doPing(); 
+      startCountdown(); 
+    }, INTERVAL * 1000);
   } else {
     running = false;
     clearInterval(timer);
     clearInterval(countdownTimer);
-    document.getElementById('btnStart').textContent = 'Iniciar';
+    
+    btn.textContent = 'Iniciar';
+    btn.classList.remove('active');
     document.getElementById('dot').style.background = 'var(--color-background-tertiary)';
     document.getElementById('status').textContent = 'Inactivo';
     document.getElementById('countdown').textContent = '—';
-    log('Detenido');
+    log('Monitoreo detenido');
   }
 }
 </script>
+
+</body>
+</html>
