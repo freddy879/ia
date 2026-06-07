@@ -255,7 +255,8 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
         <strong>📋 Pasos para configurar:</strong><br><br>
         1. Ve a <strong>workers.cloudflare.com</strong> (gratis)<br>
         2. Crea un nuevo Worker y pega el código del archivo <code>worker.js</code><br>
-        3. En Variables de entorno agrega: <code>GEMINI_API_KEY</code> = tu key de Google<br>
+        3. En <strong>Settings → Variables and Secrets</strong> agrega:<br>
+        &nbsp;&nbsp;&nbsp;<code>GEMINI_API_KEY</code> = tu key de Google<br>
         4. Para obtener la key gratis: <strong>aistudio.google.com</strong> → Get API Key<br>
         5. Copia la URL del Worker y pégala arriba<br><br>
         ✅ Gemini gratis: <strong>1,500 análisis/día</strong><br>
@@ -280,7 +281,6 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
 </div>
 
 <script>
-// ── WORKER URL (guardado en localStorage) ──
 let WORKER_URL = localStorage.getItem('agro_worker_url') || '';
 
 function prodIcon(n){
@@ -366,7 +366,7 @@ async function doAnalyze(type){
 
   try{
     const body=type==='image'
-      ?{type:'image',image:imgBase64,mimeType:imgMime}
+      ?{type:'image',imageBase64:imgBase64,mimeType:imgMime}
       :{type:'text',text:document.getElementById('symptoms').value.trim()};
 
     const res=await fetch(WORKER_URL,{
@@ -392,7 +392,7 @@ function renderResult(r,imgSrc){
   document.getElementById('rimg').innerHTML=imgSrc
     ?`<img src="${imgSrc}" style="width:100%;max-height:190px;object-fit:cover;display:block">`:'';
 
-  document.getElementById('rbadge').textContent=(r.icono||'🔍')+' Diagnóstico IA';
+  document.getElementById('rbadge').textContent=(r.estado_icono||'🔍')+' Diagnóstico IA';
   document.getElementById('rplant').textContent=r.planta||'Planta analizada';
   document.getElementById('rcond').textContent=r.condicion||'';
 
@@ -401,7 +401,7 @@ function renderResult(r,imgSrc){
   document.getElementById('rhero').style.background=
     sev>=65?'var(--danger)':sev>=30?'#b07d00':'var(--green)';
 
-  const prods=(r.productos||[]);
+  const prods=(r.productos_recomendados||[]);
   let ph='<div class="prods">';
   prods.forEach((p,i)=>{
     const top=i===0;
@@ -448,7 +448,7 @@ function saveWorker(){
   }
   st.style.color='var(--muted)';st.textContent='Probando conexión...';
   fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'text',text:'prueba de conexión'})})
-    .then(r=>{
+    .then(()=>{
       WORKER_URL=url;
       localStorage.setItem('agro_worker_url',url);
       st.style.color='green';
@@ -459,7 +459,7 @@ function saveWorker(){
       WORKER_URL=url;
       localStorage.setItem('agro_worker_url',url);
       st.style.color='var(--orange)';
-      st.textContent='⚠️ URL guardada. No se pudo verificar (puede que CORS bloquee el test, intenta analizar una planta).';
+      st.textContent='⚠️ URL guardada. Intenta analizar una planta para verificar.';
       checkWornerWarn();
     });
 }
