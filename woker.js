@@ -1,15 +1,10 @@
 // ============================================================
 //  AgroNaranjito — Cloudflare Worker (backend seguro)
-//  Instrucciones de despliegue al final de este archivo
 // ============================================================
-
-// ⚠️  PON TU API KEY DE GEMINI AQUÍ (o en Variables de entorno de Cloudflare)
-const GEMINI_API_KEY = "TU_API_KEY_AQUI";
 
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
-// Lista de productos de la tienda (solo nombres, sin precios)
 const PRODUCTOS_TIENDA = [
   "PROMET COBRE 1L","PAMEX 500ML","YARA VITA 1L","INDUCFLOR 500ML","ZEANITRO 1L",
   "QUIMIFOL 600","GREEN MASTER 250ML","SACO FULLCACAO 25K","LABIN LABICUAJE 500G",
@@ -68,7 +63,6 @@ ${PRODUCTOS_TIENDA.join(", ")}
 - Si la planta está sana, recomienda fertilizantes o preventivos de la lista
 - Responde en español`;
 
-// ── CORS headers ──────────────────────────────────────────────
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -76,8 +70,10 @@ const CORS = {
 };
 
 export default {
-  async fetch(request) {
-    // Preflight
+  async fetch(request, env) {
+    // ⬆️ La API key viene de Variables de entorno de Cloudflare (Settings → Variables)
+    const GEMINI_API_KEY = env.GEMINI_API_KEY;
+
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS });
     }
@@ -90,7 +86,6 @@ export default {
       const body = await request.json();
       const { type, imageBase64, mimeType, text } = body;
 
-      // Build Gemini parts
       let parts = [];
 
       if (type === "image" && imageBase64) {
@@ -112,7 +107,6 @@ export default {
         );
       }
 
-      // Call Gemini
       const geminiRes = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -138,14 +132,12 @@ export default {
       const rawText =
         geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-      // Clean and parse JSON
       const clean = rawText.replace(/```json|```/g, "").trim();
 
       let parsed;
       try {
         parsed = JSON.parse(clean);
       } catch {
-        // If Gemini wrapped in text, try to extract JSON
         const match = clean.match(/\{[\s\S]*\}/);
         if (match) {
           parsed = JSON.parse(match[0]);
@@ -167,43 +159,3 @@ export default {
     }
   },
 };
-
-/*
-================================================================
-  INSTRUCCIONES DE DESPLIEGUE (para el técnico)
-================================================================
-
-PASO 1 — Obtener API Key de Gemini (GRATIS)
-  1. Ve a https://aistudio.google.com/app/apikey
-  2. Clic en "Create API key"
-  3. Copia la key generada
-
-PASO 2 — Crear el Worker en Cloudflare
-  1. Ve a https://dash.cloudflare.com → Workers & Pages → Create
-  2. Pon nombre: "agronaranjito-api"
-  3. Clic en "Edit code"
-  4. Borra el código de ejemplo y pega todo este archivo
-  5. Reemplaza "TU_API_KEY_AQUI" con tu key de Gemini
-     (O mejor: ve a Settings → Variables → añade GEMINI_API_KEY como variable
-      de entorno secreta y cambia la línea a: const GEMINI_API_KEY = env.GEMINI_API_KEY;
-      y agrega `env` al parámetro: async fetch(request, env) )
-  6. Clic "Save and Deploy"
-
-PASO 3 — Copiar la URL del Worker
-  - Se ve así: https://agronaranjito-api.TU-USUARIO.workers.dev
-  - Pon esa URL en el archivo agronaranjito.html donde dice:
-    const WORKER_URL = "https://agronaranjito-api.TU-USUARIO.workers.dev";
-
-PASO 4 — Publicar el HTML
-  - Puedes subirlo a cualquier hosting estático gratuito:
-    • Cloudflare Pages (recomendado, mismo panel)
-    • GitHub Pages
-    • Netlify
-
-LÍMITES GRATUITOS:
-  - Cloudflare Workers: 100,000 requests/día ✅
-  - Gemini 2.0 Flash:   1,500 requests/día  ✅
-  - Para 30 análisis/día están más que cubiertos
-
-================================================================
-*/
