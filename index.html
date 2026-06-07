@@ -6,785 +6,466 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AgroNaranjito">
 <title>AgroNaranjito</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  :root{
-    --green:#2d6a2d;--green-light:#4a9e4a;--green-pale:#e8f5e8;--green-mid:#d4edda;
-    --orange:#e8870a;--orange-light:#f5a623;--orange-pale:#fff3e0;
-    --soil:#7a5230;--soil-light:#a0723f;
-    --white:#fff;--gray:#f5f5f0;--text:#1a2e1a;--muted:#6b7c6b;
-    --danger:#c0392b;--danger-pale:#fdecea;
-    --radius:18px;--radius-sm:10px;
-  }
-  html,body{height:100%;background:#f0ede4;font-family:'Nunito',sans-serif;color:var(--text);overflow:hidden}
-  
-  /* ── SPLASH ── */
-  #splash{position:fixed;inset:0;background:var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .5s}
-  #splash.hide{opacity:0;pointer-events:none}
-  .splash-logo{font-family:'Fraunces',serif;font-size:42px;color:#fff;font-weight:900;letter-spacing:-1px}
-  .splash-logo span{color:var(--orange-light)}
-  .splash-sub{color:rgba(255,255,255,.7);margin-top:8px;font-size:14px;font-weight:600;letter-spacing:.5px}
-  .splash-icon{font-size:72px;margin-bottom:16px;animation:bounce 1s ease infinite alternate}
-  @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --green:#2d6a2d;--green2:#3d8c3d;--green-pale:#e8f5e8;
+  --orange:#e8870a;--orange-pale:#fff3e0;
+  --white:#fff;--bg:#f0ede4;--text:#1a2e1a;--muted:#6b7c6b;
+  --danger:#c0392b;--danger-pale:#fdecea;
+  --r:18px;--rs:10px;
+}
+html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);overflow:hidden}
 
-  /* ── APP SHELL ── */
-  #app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;background:#f0ede4}
-  
-  /* ── HEADER ── */
-  .header{background:var(--green);padding:14px 20px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-  .header-logo{font-family:'Fraunces',serif;font-size:22px;color:#fff;font-weight:900;letter-spacing:-.5px}
-  .header-logo span{color:var(--orange-light)}
-  .header-badge{background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:11px;color:#fff;font-weight:700;margin-left:auto}
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+.spl-icon{font-size:70px;animation:bob 1.2s ease infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+.spl-logo{font-family:'Fraunces',serif;font-size:40px;color:#fff;font-weight:900;margin-top:10px}
+.spl-logo span{color:#f5a623}
+.spl-sub{color:rgba(255,255,255,.7);font-size:13px;font-weight:700;margin-top:6px;letter-spacing:.4px}
 
-  /* ── SCREENS ── */
-  .screen{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:80px}
-  .screen.active{display:flex}
+/* SHELL */
+#app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;background:var(--bg)}
+.header{background:var(--green);padding:13px 18px;display:flex;align-items:center;flex-shrink:0}
+.hlogo{font-family:'Fraunces',serif;font-size:21px;color:#fff;font-weight:900}
+.hlogo span{color:#f5a623}
+.hbadge{margin-left:auto;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:11px;color:#fff;font-weight:700}
 
-  /* ── HOME ── */
-  .home-hero{background:linear-gradient(160deg,var(--green) 0%,#3d8c3d 100%);padding:24px 20px 32px;color:#fff;position:relative;overflow:hidden}
-  .home-hero::after{content:'🌿';font-size:120px;position:absolute;right:-10px;top:-10px;opacity:.12}
-  .hero-greeting{font-size:13px;font-weight:700;opacity:.8;text-transform:uppercase;letter-spacing:.8px}
-  .hero-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;line-height:1.15;margin-top:4px}
-  .hero-title span{color:var(--orange-light)}
-  .hero-sub{font-size:13px;opacity:.85;margin-top:6px;line-height:1.5}
+/* SCREENS */
+.screen{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:76px}
+.screen.active{display:flex}
 
-  .home-cards{padding:16px}
-  .section-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
-  
-  .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-  .action-card{background:var(--white);border-radius:var(--radius);padding:18px 14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(0,0,0,.08);border:none;text-align:left;width:100%}
-  .action-card:active{transform:scale(.97)}
-  .action-card.primary{background:var(--green);color:#fff;grid-column:1/-1}
-  .action-card.primary .ac-icon{background:rgba(255,255,255,.2)}
-  .action-card.primary .ac-title{color:#fff}
-  .action-card.primary .ac-desc{color:rgba(255,255,255,.8)}
-  .ac-icon{width:42px;height:42px;border-radius:12px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:22px}
-  .ac-title{font-size:15px;font-weight:800;color:var(--text)}
-  .ac-desc{font-size:12px;color:var(--muted);line-height:1.4}
+/* HOME */
+.hero{background:linear-gradient(150deg,var(--green) 0%,var(--green2) 100%);padding:22px 18px 30px;color:#fff;position:relative;overflow:hidden}
+.hero::after{content:'🌿';font-size:110px;position:absolute;right:-8px;top:-8px;opacity:.11;pointer-events:none}
+.hero-hi{font-size:12px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.8px}
+.hero-title{font-family:'Fraunces',serif;font-size:27px;font-weight:900;line-height:1.15;margin-top:4px}
+.hero-title span{color:#f5a623}
+.hero-desc{font-size:13px;opacity:.82;margin-top:6px;line-height:1.5}
+.home-body{padding:16px;display:flex;flex-direction:column;gap:12px}
+.slbl{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acard{background:var(--white);border-radius:var(--r);padding:18px 14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;border:none;text-align:left;width:100%;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .15s}
+.acard:active{transform:scale(.97)}
+.acard.full{grid-column:1/-1;background:var(--green);color:#fff}
+.acard.full .aci{background:rgba(255,255,255,.2)}
+.acard.full .act{color:#fff}
+.acard.full .acd{color:rgba(255,255,255,.8)}
+.aci{width:40px;height:40px;border-radius:11px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:21px}
+.act{font-size:14px;font-weight:800;color:var(--text)}
+.acd{font-size:12px;color:var(--muted);line-height:1.4}
 
-  .quick-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
-  .stat-card{background:var(--white);border-radius:var(--radius-sm);padding:12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-  .stat-num{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--green)}
-  .stat-lbl{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px;text-transform:uppercase}
+/* SCAN */
+.stop{background:var(--green);padding:18px;color:#fff}
+.stitle{font-family:'Fraunces',serif;font-size:23px;font-weight:900}
+.ssub{font-size:13px;opacity:.8;margin-top:3px}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #eee;flex-shrink:0}
+.tab{flex:1;padding:12px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s}
+.tab.on{color:var(--green);border-bottom-color:var(--green)}
+.tab.off{color:var(--muted)}
+.sbody{padding:15px;display:flex;flex-direction:column;gap:13px}
+.uzone{background:var(--white);border-radius:var(--r);border:2.5px dashed #b5d4aa;padding:30px 18px;display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;transition:all .2s}
+.uzone:active,.uzone.drag{border-color:var(--green);background:var(--green-pale)}
+.uzone .uzi{font-size:50px}
+.uzone .uzt{font-size:15px;font-weight:800}
+.uzone .uzs{font-size:12px;color:var(--muted);text-align:center}
+.divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;font-weight:700}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#ddd}
+.btn-green{background:var(--green);color:#fff;border:none;border-radius:var(--r);padding:15px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
+.btn-green:active{background:#1e4e1e}
+.btn-orange{background:var(--orange-pale);color:#7a5230;border:none;border-radius:var(--r);padding:15px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
+.btn-analyze{background:var(--orange);color:#fff;border:none;border-radius:var(--r);padding:16px;font-size:15px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
+.btn-analyze:disabled{background:#ccc;cursor:not-allowed}
+.btn-analyze:not(:disabled):active{background:#b06000}
+#file-input,#cam-input{display:none}
+.prev-box{background:var(--white);border-radius:var(--r);overflow:hidden;position:relative}
+.prev-box img{width:100%;max-height:200px;object-fit:cover;display:block}
+.prev-box .rem{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.textarea{background:var(--white);border-radius:var(--r);border:1.5px solid #ddd;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text);width:100%;resize:none;min-height:120px;outline:none;line-height:1.6}
+.textarea:focus{border-color:var(--green)}
+.hint{background:var(--green-pale);border-radius:var(--rs);padding:11px;font-size:13px;color:var(--green);line-height:1.5}
 
-  /* ── SCAN SCREEN ── */
-  .scan-top{background:var(--green);padding:20px;color:#fff}
-  .scan-title{font-family:'Fraunces',serif;font-size:24px;font-weight:900}
-  .scan-sub{font-size:13px;opacity:.8;margin-top:4px}
-  
-  .scan-body{padding:16px;display:flex;flex-direction:column;gap:14px}
-  
-  .upload-zone{background:var(--white);border-radius:var(--radius);border:2.5px dashed #b5d4aa;padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:all .2s}
-  .upload-zone:active,.upload-zone.drag{border-color:var(--green);background:var(--green-pale)}
-  .upload-zone .uz-icon{font-size:52px}
-  .upload-zone .uz-title{font-size:15px;font-weight:800;color:var(--text)}
-  .upload-zone .uz-sub{font-size:12px;color:var(--muted);text-align:center}
-  
-  .or-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;font-weight:700}
-  .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:#ddd}
-  
-  .cam-btn{background:var(--green);color:#fff;border:none;border-radius:var(--radius);padding:16px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;transition:background .2s}
-  .cam-btn:active{background:#1e4e1e}
-  .cam-btn span{font-size:22px}
-  
-  .text-btn{background:var(--orange-pale);color:var(--soil);border:none;border-radius:var(--radius);padding:16px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;transition:background .2s}
-  .text-btn:active{background:#ffe0b0}
-  .text-btn span{font-size:22px}
+/* WORKER CONFIG */
+.config-card{background:var(--white);border-radius:var(--r);padding:15px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.config-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.config-input{background:#f8f8f6;border:1.5px solid #e0e0d8;border-radius:var(--rs);padding:11px 13px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);width:100%;outline:none}
+.config-input:focus{border-color:var(--green)}
+.config-save{background:var(--green);color:#fff;border:none;border-radius:var(--rs);padding:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:8px}
+.config-status{font-size:12px;margin-top:6px;font-weight:700;text-align:center}
 
-  #file-input{display:none}
-  #cam-input{display:none}
-  
-  .preview-box{background:var(--white);border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-  .preview-box img{width:100%;max-height:220px;object-fit:cover;display:block}
-  .preview-box .remove-img{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-  
-  .analyze-btn{background:var(--orange);color:#fff;border:none;border-radius:var(--radius);padding:18px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;transition:all .2s;letter-spacing:.3px}
-  .analyze-btn:active{background:var(--soil)}
-  .analyze-btn:disabled{background:#ccc;cursor:not-allowed}
+/* LOADING */
+#loverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
+#loverlay.show{display:flex}
+.lcard{background:#fff;border-radius:22px;padding:26px 30px;text-align:center;max-width:270px}
+.lspinner{width:48px;height:48px;border:4px solid var(--green-pale);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ltxt{font-size:15px;font-weight:700}
+.lsub{font-size:12px;color:var(--muted);margin-top:4px}
 
-  /* ── TEXT DESCRIBE ── */
-  .desc-area{background:var(--white);border-radius:var(--radius);border:1.5px solid #ddd;padding:14px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text);width:100%;resize:none;min-height:130px;outline:none;line-height:1.6}
-  .desc-area:focus{border-color:var(--green)}
+/* RESULT */
+.rhero{padding:18px;color:#fff;position:relative}
+.rback{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:5px 13px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:10px;display:inline-flex;align-items:center;gap:4px}
+.rbadge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 11px;font-size:12px;font-weight:700;margin-bottom:7px}
+.rplant{font-family:'Fraunces',serif;font-size:25px;font-weight:900;line-height:1.2}
+.rcond{font-size:13px;opacity:.85;margin-top:3px}
+.rbody{padding:15px;display:flex;flex-direction:column;gap:13px}
+.rcard{background:var(--white);border-radius:var(--r);padding:15px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.rctitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:5px}
+.rtext{font-size:14px;color:var(--text);line-height:1.65}
+.sevbar{height:8px;border-radius:4px;background:#e8e8e0;margin:10px 0 4px;overflow:hidden}
+.sevfill{height:100%;border-radius:4px;transition:width .8s ease}
+.sev-low{background:#4caf50}.sev-mid{background:#ff9800}.sev-high{background:#f44336}
+.prods{display:flex;flex-direction:column;gap:9px}
+.prod{background:var(--green-pale);border-radius:var(--rs);padding:13px;border-left:4px solid var(--green)}
+.prod.top{background:var(--orange-pale);border-left-color:var(--orange)}
+.pbadge{display:inline-block;background:var(--orange);color:#fff;border-radius:7px;font-size:10px;font-weight:800;padding:2px 8px;margin-bottom:4px}
+.pname{font-size:14px;font-weight:800}
+.preason{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.tips{display:flex;flex-direction:column;gap:8px}
+.tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.5}
+.tipdot{width:22px;height:22px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px}
+.btn-new{background:var(--green);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;margin-top:4px}
+.btn-new:active{background:#1e4e1e}
 
-  /* ── LOADING ── */
-  #loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-  #loading-overlay.show{display:flex}
-  .loading-card{background:#fff;border-radius:24px;padding:28px 32px;text-align:center;max-width:280px}
-  .loading-spinner{width:52px;height:52px;border:4px solid var(--green-pale);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .loading-text{font-size:15px;font-weight:700;color:var(--text)}
-  .loading-sub{font-size:12px;color:var(--muted);margin-top:4px}
-
-  /* ── RESULTS ── */
-  .result-hero{padding:20px;background:var(--green);color:#fff;position:relative}
-  .result-back{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:6px 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;display:inline-flex;align-items:center;gap:5px}
-  .result-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;margin-bottom:8px}
-  .result-plant{font-family:'Fraunces',serif;font-size:26px;font-weight:900;line-height:1.2}
-  .result-status{font-size:13px;opacity:.85;margin-top:4px}
-  .result-img{width:100%;max-height:180px;object-fit:cover;display:block}
-  
-  .result-body{padding:16px;display:flex;flex-direction:column;gap:14px}
-  
-  .result-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-  .result-card-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-  .result-card-title .rticon{font-size:16px}
-  .result-text{font-size:14px;color:var(--text);line-height:1.65}
-
-  .severity-bar{height:8px;border-radius:4px;background:#e8e8e8;margin:10px 0 4px;overflow:hidden}
-  .severity-fill{height:100%;border-radius:4px;background:var(--orange);transition:width .8s ease}
-  .severity-fill.low{background:#4caf50}
-  .severity-fill.mid{background:#ff9800}
-  .severity-fill.high{background:#f44336}
-
-  .products-grid{display:flex;flex-direction:column;gap:10px}
-  .product-rec{background:var(--green-pale);border-radius:var(--radius-sm);padding:14px;border-left:4px solid var(--green);cursor:pointer;transition:all .2s}
-  .product-rec:active{transform:scale(.98)}
-  .product-rec.top{background:var(--orange-pale);border-left-color:var(--orange)}
-  .pr-name{font-size:14px;font-weight:800;color:var(--text)}
-  .pr-reason{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
-  .pr-price{font-size:15px;font-weight:900;color:var(--green);margin-top:6px}
-  .pr-price.top{color:var(--orange)}
-  .pr-badge{display:inline-block;background:var(--orange);color:#fff;border-radius:8px;font-size:10px;font-weight:800;padding:2px 8px;margin-bottom:4px}
-
-  .tips-list{display:flex;flex-direction:column;gap:8px}
-  .tip-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text);line-height:1.5}
-  .tip-dot{width:22px;height:22px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px}
-
-  .new-scan-btn{background:var(--green);color:#fff;border:none;border-radius:var(--radius);padding:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;margin-top:4px}
-  .new-scan-btn:active{background:#1e4e1e}
-
-  /* ── CATALOG ── */
-  .catalog-top{background:var(--green);padding:16px 20px;color:#fff}
-  .catalog-title{font-family:'Fraunces',serif;font-size:22px;font-weight:900}
-  .search-box{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);border-radius:12px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;color:#fff;width:100%;margin-top:10px;outline:none}
-  .search-box::placeholder{color:rgba(255,255,255,.65)}
-  .filter-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-top:10px;scrollbar-width:none}
-  .filter-chips::-webkit-scrollbar{display:none}
-  .chip{background:rgba(255,255,255,.18);color:#fff;border:1.5px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s;flex-shrink:0}
-  .chip.active{background:#fff;color:var(--green)}
-  
-  .catalog-list{padding:12px;display:flex;flex-direction:column;gap:8px}
-  .prod-item{background:var(--white);border-radius:var(--radius-sm);padding:13px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:transform .15s}
-  .prod-item:active{transform:scale(.98)}
-  .prod-icon{width:44px;height:44px;border-radius:12px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-  .prod-info{flex:1;min-width:0}
-  .prod-name{font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .prod-code{font-size:11px;color:var(--muted);margin-top:1px}
-  .prod-price{font-size:15px;font-weight:900;color:var(--green);white-space:nowrap}
-  .prod-stock{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:3px;display:inline-block}
-  .stock-ok{background:#e8f5e8;color:#2d6a2d}
-  .stock-low{background:#fff3e0;color:#e8870a}
-  .stock-out{background:#fdecea;color:var(--danger)}
-  .stock-exp{background:#fdecea;color:var(--danger)}
-
-  /* ── NAV ── */
-  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid #e8e8e0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--muted);transition:color .2s}
-  .nav-item.active{color:var(--green)}
-  .nav-item .nav-icon{font-size:22px;transition:transform .2s}
-  .nav-item.active .nav-icon{transform:scale(1.15)}
-  .nav-center{width:56px;height:56px;border-radius:50%;background:var(--green);margin-top:-16px;box-shadow:0 4px 14px rgba(45,106,45,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:3px solid #f0ede4;color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;gap:2px;transition:transform .2s}
-  .nav-center:active{transform:scale(.94)}
-  .nav-center .nav-icon{font-size:20px}
+/* NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid #e8e8e0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--muted);transition:color .2s}
+.ni.on{color:var(--green)}
+.ni .nio{font-size:21px;transition:transform .2s}
+.ni.on .nio{transform:scale(1.15)}
+.nc{width:54px;height:54px;border-radius:50%;background:var(--green);margin-top:-16px;box-shadow:0 4px 14px rgba(45,106,45,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:3px solid var(--bg);color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;gap:1px;transition:transform .2s}
+.nc:active{transform:scale(.93)}
+.nc .nio{font-size:19px}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
-  <div class="splash-icon">🌱</div>
-  <div class="splash-logo">Agro<span>Naranjito</span></div>
-  <div class="splash-sub">🌿 Tu agrotienda inteligente</div>
+  <div class="spl-icon">🌱</div>
+  <div class="spl-logo">Agro<span>Naranjito</span></div>
+  <div class="spl-sub">Tu agrónomo digital 🌿</div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="header">
-    <div class="header-logo">Agro<span>Naranjito</span></div>
-    <div class="header-badge">🌿 Agrotienda</div>
+    <div class="hlogo">Agro<span>Naranjito</span></div>
+    <div class="hbadge">🌿 Agrotienda</div>
   </div>
 
   <!-- HOME -->
   <div class="screen active" id="screen-home">
-    <div class="home-hero">
-      <div class="hero-greeting">Bienvenido 👋</div>
+    <div class="hero">
+      <div class="hero-hi">Bienvenido 👋</div>
       <div class="hero-title">¿Qué le pasa a tu <span>cultivo?</span></div>
-      <div class="hero-sub">Sube una foto o describe los síntomas y te recomendamos el producto ideal de nuestra tienda.</div>
+      <div class="hero-desc">Sube una foto o describe los síntomas. Te decimos qué tiene y qué producto de nuestra tienda necesita.</div>
     </div>
-    <div class="home-cards">
-      <div class="section-label">Acciones rápidas</div>
-      <div class="action-grid">
-        <button class="action-card primary" onclick="goTo('scan')">
-          <div class="ac-icon">📸</div>
-          <div class="ac-title">Analizar mi planta</div>
-          <div class="ac-desc">Sube foto o describe los síntomas para diagnóstico inmediato</div>
+    <div class="home-body">
+      <div class="slbl">Analizar tu planta</div>
+      <div class="grid2">
+        <button class="acard full" onclick="goTo('scan')">
+          <div class="aci">📸</div>
+          <div class="act">Analizar mi planta</div>
+          <div class="acd">Foto o descripción → diagnóstico + producto recomendado</div>
         </button>
-        <button class="action-card" onclick="goTo('catalog')">
-          <div class="ac-icon">🧪</div>
-          <div class="ac-title">Catálogo</div>
-          <div class="ac-desc">Ver todos los productos disponibles</div>
+        <button class="acard" onclick="goTo('scan');setTimeout(()=>switchTab('text'),200)">
+          <div class="aci">✍️</div>
+          <div class="act">Describir síntomas</div>
+          <div class="acd">Sin foto, solo en palabras</div>
         </button>
-        <button class="action-card" onclick="goTo('scan');setTimeout(()=>document.getElementById('text-tab').click(),200)">
-          <div class="ac-icon">✍️</div>
-          <div class="ac-title">Describir síntomas</div>
-          <div class="ac-desc">Sin foto, solo en palabras</div>
+        <button class="acard" onclick="goTo('config')">
+          <div class="aci">⚙️</div>
+          <div class="act">Configurar</div>
+          <div class="acd">URL del servidor</div>
         </button>
       </div>
-      <div class="section-label">Inventario rápido</div>
-      <div class="quick-stats">
-        <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Productos</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--orange)" id="stat-low">0</div><div class="stat-lbl">Stock bajo</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--danger)" id="stat-exp">0</div><div class="stat-lbl">Vencidos</div></div>
+      <div id="home-worker-warn" style="display:none;background:#fff3e0;border-radius:var(--rs);padding:12px;font-size:13px;color:#7a5230;line-height:1.5">
+        ⚠️ <strong>Configura el servidor primero.</strong> Ve a ⚙️ Configurar y pega la URL de tu Cloudflare Worker para activar el diagnóstico con IA.
       </div>
     </div>
   </div>
 
   <!-- SCAN -->
   <div class="screen" id="screen-scan">
-    <div class="scan-top">
-      <div class="scan-title">Analizar planta 🔬</div>
-      <div class="scan-sub">Foto o descripción → diagnóstico + productos recomendados</div>
+    <div class="stop">
+      <div class="stitle">Analizar planta 🔬</div>
+      <div class="ssub">Foto o descripción → diagnóstico inmediato</div>
+    </div>
+    <div class="tabs">
+      <button class="tab on" id="tab-photo-btn" onclick="switchTab('photo')">📸 Foto</button>
+      <button class="tab off" id="tab-text-btn" onclick="switchTab('text')">✍️ Describir</button>
     </div>
 
-    <!-- Tabs -->
-    <div style="display:flex;background:#fff;border-bottom:1px solid #eee">
-      <button id="photo-tab" onclick="switchTab('photo')" style="flex:1;padding:13px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--green);border-bottom:3px solid var(--green);cursor:pointer">📸 Foto</button>
-      <button id="text-tab" onclick="switchTab('text')" style="flex:1;padding:13px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer">✍️ Describir</button>
-    </div>
-
-    <!-- Photo tab -->
-    <div id="tab-photo" class="scan-body">
-      <div id="upload-zone" class="upload-zone" onclick="document.getElementById('file-input').click()">
-        <div class="uz-icon">🌿</div>
-        <div class="uz-title">Subir foto de tu cultivo</div>
-        <div class="uz-sub">Toca para seleccionar una imagen de tu galería</div>
+    <!-- Foto -->
+    <div id="tab-photo" class="sbody">
+      <div id="uzone" class="uzone" onclick="document.getElementById('file-input').click()">
+        <div class="uzi">🌿</div>
+        <div class="uzt">Subir foto del cultivo</div>
+        <div class="uzs">Toca para elegir imagen de la galería</div>
       </div>
       <input type="file" id="file-input" accept="image/*" onchange="handleFile(this)">
       <input type="file" id="cam-input" accept="image/*" capture="environment" onchange="handleFile(this)">
-      
-      <div id="preview-container" style="display:none">
-        <div class="preview-box">
-          <img id="preview-img" src="" alt="Vista previa">
-          <button class="remove-img" onclick="removeImage()">✕</button>
+      <div id="prev-cont" style="display:none">
+        <div class="prev-box">
+          <img id="prev-img" src="" alt="Vista previa">
+          <button class="rem" onclick="removeImg()">✕</button>
         </div>
       </div>
-
-      <div class="or-divider">o</div>
-      <button class="cam-btn" onclick="document.getElementById('cam-input').click()"><span>📷</span> Tomar foto con cámara</button>
-      
-      <button class="analyze-btn" id="analyze-photo-btn" disabled onclick="analyzeImage()">🔍 Analizar planta</button>
+      <div class="divider">o</div>
+      <button class="btn-green" onclick="document.getElementById('cam-input').click()"><span>📷</span> Tomar foto con cámara</button>
+      <button class="btn-analyze" id="btn-photo" disabled onclick="doAnalyze('image')">🔍 Analizar planta</button>
     </div>
 
-    <!-- Text tab -->
-    <div id="tab-text" class="scan-body" style="display:none">
-      <div style="background:var(--green-pale);border-radius:var(--radius-sm);padding:12px;font-size:13px;color:var(--green);line-height:1.5">
-        💡 Describe los síntomas que ves: color de las hojas, manchas, insectos, deformaciones, planta afectada, etc.
-      </div>
-      <textarea class="desc-area" id="symptoms-text" placeholder="Ej: Mis plantas de cacao tienen manchas amarillas en las hojas, algunas hojas están cayendo y veo unos insectos pequeños en el tallo..."></textarea>
-      <button class="analyze-btn" onclick="analyzeText()">🔍 Diagnosticar síntomas</button>
+    <!-- Texto -->
+    <div id="tab-text" class="sbody" style="display:none">
+      <div class="hint">💡 Describe lo que ves: color de hojas, manchas, insectos, deformaciones, planta afectada...</div>
+      <textarea class="textarea" id="symptoms" placeholder="Ej: Mis matas de cacao tienen manchas amarillas en las hojas, se están cayendo y veo unos insectos pequeños en el tallo..."></textarea>
+      <button class="btn-analyze" onclick="doAnalyze('text')">🔍 Diagnosticar síntomas</button>
     </div>
   </div>
 
-  <!-- RESULTS (hidden until analysis) -->
+  <!-- RESULT -->
   <div class="screen" id="screen-result">
-    <div id="result-img-container"></div>
-    <div class="result-hero">
-      <button class="result-back" onclick="goTo('scan')">← Nuevo análisis</button>
-      <div class="result-badge" id="result-badge">🔍 Diagnóstico</div>
-      <div class="result-plant" id="result-plant">Analizando...</div>
-      <div class="result-status" id="result-status"></div>
+    <div id="rimg"></div>
+    <div class="rhero" id="rhero">
+      <button class="rback" onclick="goTo('scan')">← Nuevo análisis</button>
+      <div class="rbadge" id="rbadge">🔍 Diagnóstico</div>
+      <div class="rplant" id="rplant">—</div>
+      <div class="rcond" id="rcond"></div>
     </div>
-    <div class="result-body" id="result-body"></div>
+    <div class="rbody" id="rbody"></div>
   </div>
 
-  <!-- CATALOG -->
-  <div class="screen" id="screen-catalog">
-    <div class="catalog-top">
-      <div class="catalog-title">🧪 Catálogo de productos</div>
-      <input class="search-box" type="search" placeholder="Buscar producto..." oninput="filterCatalog(this.value)" id="cat-search">
-      <div class="filter-chips" id="filter-chips">
-        <div class="chip active" onclick="setFilter('todos',this)">Todos</div>
-        <div class="chip" onclick="setFilter('bajo',this)">⚠️ Stock bajo</div>
-        <div class="chip" onclick="setFilter('vencido',this)">🚫 Vencidos</div>
-        <div class="chip" onclick="setFilter('ok',this)">✅ Disponible</div>
+  <!-- CONFIG -->
+  <div class="screen" id="screen-config">
+    <div class="stop">
+      <div class="stitle">⚙️ Configurar servidor</div>
+      <div class="ssub">Conecta con tu Cloudflare Worker</div>
+    </div>
+    <div class="sbody">
+      <div class="config-card">
+        <div class="config-label">URL de tu Cloudflare Worker</div>
+        <input class="config-input" type="url" id="worker-url" placeholder="https://tu-worker.tu-usuario.workers.dev">
+        <button class="config-save" onclick="saveWorker()">💾 Guardar y probar conexión</button>
+        <div class="config-status" id="config-status"></div>
+      </div>
+      <div style="background:var(--white);border-radius:var(--r);padding:15px;font-size:13px;line-height:1.7;color:var(--text);box-shadow:0 1px 6px rgba(0,0,0,.06)">
+        <strong>📋 Pasos para configurar:</strong><br><br>
+        1. Ve a <strong>workers.cloudflare.com</strong> (gratis)<br>
+        2. Crea un nuevo Worker y pega el código del archivo <code>worker.js</code><br>
+        3. En Variables de entorno agrega: <code>GEMINI_API_KEY</code> = tu key de Google<br>
+        4. Para obtener la key gratis: <strong>aistudio.google.com</strong> → Get API Key<br>
+        5. Copia la URL del Worker y pégala arriba<br><br>
+        ✅ Gemini gratis: <strong>1,500 análisis/día</strong><br>
+        ✅ Cloudflare gratis: <strong>100,000 req/día</strong>
       </div>
     </div>
-    <div class="catalog-list" id="catalog-list"></div>
   </div>
 
-  <!-- NAV -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="goTo('home')" id="nav-home">
-      <span class="nav-icon">🏡</span>Inicio
-    </button>
-    <div class="nav-center" onclick="goTo('scan')">
-      <span class="nav-icon">🔬</span>Analizar
-    </div>
-    <button class="nav-item" onclick="goTo('catalog')" id="nav-catalog">
-      <span class="nav-icon">🧪</span>Catálogo
-    </button>
+  <nav class="bnav">
+    <button class="ni on" id="nav-home" onclick="goTo('home')"><span class="nio">🏡</span>Inicio</button>
+    <div class="nc" onclick="goTo('scan')"><span class="nio">🔬</span>Analizar</div>
+    <button class="ni" id="nav-config" onclick="goTo('config')"><span class="nio">⚙️</span>Config</button>
   </nav>
 </div>
 
-<div id="loading-overlay">
-  <div class="loading-card">
-    <div class="loading-spinner"></div>
-    <div class="loading-text" id="loading-text">Analizando tu planta...</div>
-    <div class="loading-sub">Consultando con el agrónomo IA 🌱</div>
+<div id="loverlay">
+  <div class="lcard">
+    <div class="lspinner"></div>
+    <div class="ltxt" id="ltxt">Analizando...</div>
+    <div class="lsub">Consultando agrónomo IA 🌱</div>
   </div>
 </div>
 
 <script>
-const PRODUCTS = [
-{"code":"H8976","name":"PROMET COBRE 1L","cost":18.36,"price":22,"stock":"1","exp":"2026-04-01","expired":true,"low":true},
-{"code":"7777772","name":"PAMEX 500ML","cost":4.5,"price":6.5,"stock":"11","exp":"2027-07-01","expired":false,"low":false},
-{"code":"878543","name":"YARA VITA 1L","cost":1,"price":13,"stock":"4","exp":"2025-03-18","expired":true,"low":false},
-{"code":"11313","name":"INDUCFLOR 500ML","cost":5.18,"price":7,"stock":"30","exp":"2028-10-20","expired":false,"low":false},
-{"code":"22290","name":"ZEANITRO 1L","cost":9.54,"price":13.25,"stock":"4","exp":"2028-03-14","expired":false,"low":false},
-{"code":"U87543","name":"QUIMIFOL 600","cost":8.91,"price":12,"stock":"6","exp":"-","expired":false,"low":false},
-{"code":"3222","name":"GREEN MASTER 250ML","cost":2.83,"price":4,"stock":"6","exp":"2027-01-01","expired":false,"low":false},
-{"code":"-","name":"SACO FULLCACAO 25K","cost":13,"price":18,"stock":"17","exp":"-","expired":false,"low":false},
-{"code":"14312","name":"LABIN LABICUAJE 500G","cost":1,"price":6.5,"stock":"12","exp":"2030-07-01","expired":false,"low":false},
-{"code":"55555","name":"CABALLO DE TROYA 1L","cost":18.9,"price":26,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"00024","name":"ANGLO QUAT","cost":2.8,"price":5,"stock":"16","exp":"2027-09-21","expired":false,"low":false},
-{"code":"E23","name":"KAÑON 250ML","cost":1,"price":5,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"777","name":"KRE-SAD 500M","cost":2,"price":5,"stock":"5","exp":"2027-06-01","expired":false,"low":false},
-{"code":"00015","name":"FUNGIL FUNGICIDA 400ML","cost":4,"price":7,"stock":"12","exp":"2027-02-26","expired":false,"low":false},
-{"code":"-","name":"COMBO FLORACION COMPLETO","cost":11,"price":19,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"09976","name":"NAIROBI 250ML","cost":5.5,"price":15,"stock":"12","exp":"2027-03-19","expired":false,"low":false},
-{"code":"23456789","name":"KILLER GALON","cost":16,"price":22,"stock":"6","exp":"-","expired":false,"low":false},
-{"code":"7434563","name":"OLIGOMIX 100G","cost":3.06,"price":4.5,"stock":"6","exp":"2027-04-01","expired":false,"low":false},
-{"code":"89","name":"BIOBONB GALON","cost":1,"price":58,"stock":"2","exp":"2028-12-18","expired":false,"low":true},
-{"code":"123313","name":"CANECA GLYFOSAD","cost":40,"price":80,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"T6756","name":"MOSKITION 100G","cost":1.2,"price":1.75,"stock":"2","exp":"-","expired":false,"low":true},
-{"code":"23121212","name":"LABIN RAIZ","cost":3,"price":8,"stock":"3","exp":"2025-04-01","expired":true,"low":true},
-{"code":"J89675","name":"PROMET CALCIO 500ML","cost":7.62,"price":10.5,"stock":"4","exp":"2025-01-01","expired":true,"low":false},
-{"code":"756432","name":"HACHA-ROSS 1L","cost":5,"price":9,"stock":"2","exp":"2026-11-11","expired":false,"low":true},
-{"code":"8675432","name":"PANTANAL 1L","cost":7,"price":10,"stock":"3","exp":"2025-11-19","expired":true,"low":true},
-{"code":"J0886","name":"ATTAMIX 500G","cost":4.35,"price":5,"stock":"3","exp":"2027-08-01","expired":false,"low":true},
-{"code":"313311","name":"COMBO COMPLEMENTO","cost":17,"price":21,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"9786436","name":"ADHESIX 100ML","cost":2.34,"price":3.5,"stock":"34","exp":"2029-05-14","expired":false,"low":false},
-{"code":"097665445","name":"BASTNATE GALON","cost":18,"price":25,"stock":"4","exp":"2026-09-11","expired":false,"low":false},
-{"code":"88765445H","name":"PH CHECK 1L","cost":6,"price":10,"stock":"5","exp":"2027-12-01","expired":false,"low":false},
-{"code":"655756","name":"GLYFOSAD 480","cost":15,"price":18,"stock":"1","exp":"2027-12-12","expired":false,"low":true},
-{"code":"-","name":"CANECA CHACAL","cost":155,"price":185,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"E35346","name":"PROMET BORO 250CC","cost":4.59,"price":6,"stock":"2","exp":"2025-04-01","expired":true,"low":true},
-{"code":"7354","name":"CYTOKIN 1L","cost":30,"price":34.5,"stock":"2","exp":"-","expired":false,"low":true},
-{"code":"00038","name":"KOPERCUP 500G","cost":6.5,"price":9.5,"stock":"7","exp":"-","expired":false,"low":false},
-{"code":"444","name":"GATILLER 1L","cost":11.7,"price":16.25,"stock":"16","exp":"2028-07-17","expired":false,"low":false},
-{"code":"00014","name":"XSTRATA GOLD FUNGICIDA 250ML","cost":10,"price":12,"stock":"4","exp":"2026-04-04","expired":true,"low":false},
-{"code":"97867564","name":"ARRASADOR GALON","cost":19,"price":25,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"888","name":"INDUCPRO MAGNESIO 1L","cost":11.7,"price":16.25,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"00022","name":"METRINEX 50 EQ 1L","cost":6.5,"price":8,"stock":"6","exp":"2027-01-18","expired":false,"low":false},
-{"code":"0997663","name":"RONDO GALON","cost":22,"price":25,"stock":"4","exp":"-","expired":false,"low":false},
-{"code":"12121","name":"CUSAMIZN 500ML","cost":10.67,"price":14.5,"stock":"43","exp":"2028-09-20","expired":false,"low":false},
-{"code":"140","name":"FERTI-ORGAN GALON","cost":16.69,"price":21,"stock":"4","exp":"2027-12-19","expired":false,"low":false},
-{"code":"88883","name":"ESLABON RAIZ 500ML","cost":6.84,"price":9.5,"stock":"18","exp":"2028-03-01","expired":false,"low":false},
-{"code":"087654","name":"DOMINAL 500ML","cost":12.5,"price":18,"stock":"18","exp":"2027-08-01","expired":false,"low":false},
-{"code":"00044","name":"TERIGRAN GALON","cost":30.2,"price":35,"stock":"1","exp":"2027-01-03","expired":false,"low":true},
-{"code":"121313","name":"MATASEC 500G","cost":2.5,"price":5,"stock":"1","exp":"2026-07-01","expired":false,"low":true},
-{"code":"00018","name":"LABICUPER-FUNGICIDA 500ML","cost":12,"price":13,"stock":"7","exp":"2029-07-07","expired":false,"low":false},
-{"code":"0786","name":"HIGHP 500ML","cost":8.5,"price":11,"stock":"21","exp":"-","expired":false,"low":false},
-{"code":"G087716","name":"MOSKITION 250G","cost":2.12,"price":3.5,"stock":"3","exp":"-","expired":false,"low":true},
-{"code":"34443234","name":"MAIX 1K","cost":7.5,"price":10,"stock":"3","exp":"2027-07-01","expired":false,"low":true},
-{"code":"00111","name":"GLUFONE 1L","cost":3.5,"price":6,"stock":"31","exp":"2027-10-19","expired":false,"low":false},
-{"code":"78787","name":"ESLABON RAIZ 1L","cost":13.14,"price":18,"stock":"9","exp":"2028-08-09","expired":false,"low":false},
-{"code":"9886543","name":"RAINBOTURBO 1L","cost":7.25,"price":10,"stock":"7","exp":"2026-10-12","expired":false,"low":false},
-{"code":"576434","name":"KALEX 1L","cost":12,"price":20,"stock":"7","exp":"2027-05-01","expired":false,"low":false},
-{"code":"44443","name":"GREEN 500ML","cost":4.82,"price":8,"stock":"4","exp":"2025-01-01","expired":true,"low":false},
-{"code":"121234","name":"GLYFOSAD 480 1L","cost":1,"price":6.5,"stock":"9","exp":"2027-06-01","expired":false,"low":false},
-{"code":"0987865G","name":"KING GALON","cost":19,"price":23,"stock":"1","exp":"2028-01-09","expired":false,"low":true},
-{"code":"6767","name":"OLIMPO 1L","cost":9.54,"price":13.5,"stock":"18","exp":"2029-02-05","expired":false,"low":false},
-{"code":"0907655","name":"GALERNA 1K","cost":6.75,"price":12,"stock":"3","exp":"2027-12-04","expired":false,"low":true},
-{"code":"64533567","name":"SALAM 1L","cost":6.5,"price":12.5,"stock":"15","exp":"2027-12-12","expired":false,"low":false},
-{"code":"4545454","name":"TRIPLEXAC 1L","cost":6.75,"price":10,"stock":"10","exp":"2028-03-30","expired":false,"low":false},
-{"code":"3364532","name":"ENZIPROM 250CC","cost":5.36,"price":7.5,"stock":"6","exp":"2025-08-01","expired":true,"low":false},
-{"code":"997543","name":"LABIOFOL SUGAR K 1L","cost":1,"price":11,"stock":"5","exp":"2030-03-01","expired":false,"low":false},
-{"code":"1331311","name":"HERVITAM","cost":28.4,"price":40,"stock":"4","exp":"2028-08-05","expired":false,"low":false},
-{"code":"Q12","name":"FINIDOR 100ML","cost":6,"price":8.5,"stock":"19","exp":"2027-02-26","expired":false,"low":false},
-{"code":"18831","name":"KMELOT 100G","cost":4.5,"price":6,"stock":"9","exp":"2027-02-24","expired":false,"low":false},
-{"code":"8","name":"FLASH 500ML","cost":5,"price":7,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"00021","name":"EXPLORER-HERBICIDA 1L","cost":5.5,"price":8.5,"stock":"12","exp":"-","expired":false,"low":false},
-{"code":"-","name":"COMBO SUPER KIT NUTRICIONAL","cost":21,"price":28,"stock":"2","exp":"-","expired":false,"low":true},
-{"code":"5753321","name":"KALEX 500CC","cost":7,"price":10.5,"stock":"12","exp":"2027-01-01","expired":false,"low":false},
-{"code":"D464","name":"MIROS 500CC","cost":11.67,"price":14.5,"stock":"18","exp":"2027-08-01","expired":false,"low":false},
-{"code":"09986332","name":"CUSAMIZN 1L","cost":20.75,"price":28.5,"stock":"12","exp":"2028-09-20","expired":false,"low":false},
-{"code":"55565","name":"ZOIL 500ML","cost":9.54,"price":13,"stock":"22","exp":"2028-08-19","expired":false,"low":false},
-{"code":"00025","name":"ROMEX 1KG","cost":8,"price":12,"stock":"3","exp":"2027-11-04","expired":false,"low":true},
-{"code":"00016","name":"FUNGISEI 500ML","cost":7,"price":13.75,"stock":"8","exp":"2026-07-01","expired":false,"low":false},
-{"code":"-","name":"SACO PEPA DE ORO","cost":24,"price":29,"stock":"30","exp":"-","expired":false,"low":false},
-{"code":"67698","name":"VIRSANB GALON","cost":28,"price":80,"stock":"3","exp":"-","expired":false,"low":true},
-{"code":"-","name":"CANECA SENATOR","cost":50,"price":90,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"1111112","name":"PH CHECK 250ML","cost":2,"price":2.5,"stock":"1","exp":"2026-06-01","expired":true,"low":true},
-{"code":"65654","name":"SUPER-K60 500G","cost":2.5,"price":5,"stock":"3","exp":"2025-09-01","expired":true,"low":true},
-{"code":"12313H1","name":"COMPLEFOL FLORACION 1K","cost":2.87,"price":4.4,"stock":"5","exp":"-","expired":false,"low":false},
-{"code":"F46","name":"KYLATE 100ML","cost":1,"price":2,"stock":"17","exp":"2027-07-10","expired":false,"low":false},
-{"code":"00026","name":"CLOROTEX 75","cost":5.7,"price":8,"stock":"3","exp":"2027-07-22","expired":false,"low":true},
-{"code":"H787","name":"SHARIMIDA 250ML","cost":1,"price":8.5,"stock":"6","exp":"2027-02-01","expired":false,"low":false},
-{"code":"14","name":"CONFIABLE 500ML","cost":7.25,"price":10,"stock":"10","exp":"2027-12-01","expired":false,"low":false},
-{"code":"23213232","name":"KILLER 500ML","cost":2.25,"price":3.5,"stock":"7","exp":"-","expired":false,"low":false},
-{"code":"097643","name":"INDUCPRO CALCIO 1L","cost":11.7,"price":16.25,"stock":"11","exp":"2028-03-19","expired":false,"low":false},
-{"code":"98675E","name":"MULTIFIX 100ML","cost":1,"price":2.5,"stock":"8","exp":"2027-06-02","expired":false,"low":false},
-{"code":"G6754","name":"FUERZA VERDE 1KG","cost":2,"price":5,"stock":"4","exp":"-","expired":false,"low":false},
-{"code":"66666","name":"PERMITT-50","cost":1,"price":7.5,"stock":"28","exp":"2027-08-01","expired":false,"low":false},
-{"code":"9998762","name":"CABALLO DE TROYA 500ML","cost":9.54,"price":13.25,"stock":"8","exp":"2028-08-08","expired":false,"low":false},
-{"code":"087654354","name":"PAMEX 1L","cost":7.5,"price":10,"stock":"11","exp":"2027-07-01","expired":false,"low":false},
-{"code":"12","name":"KEEPER 250ML","cost":4.5,"price":6.5,"stock":"4","exp":"2026-01-01","expired":true,"low":false},
-{"code":"89654321","name":"QUIMIFOL 510","cost":6.46,"price":8.5,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"00020","name":"CRISQUAT-D HERBICIDA","cost":8,"price":9,"stock":"16","exp":"2027-02-11","expired":false,"low":false},
-{"code":"78787","name":"INDUCFLOR 1L","cost":9.54,"price":13,"stock":"10","exp":"2028-10-20","expired":false,"low":false},
-{"code":"1H1221","name":"COMPLEFOL ENGROSE 1K","cost":2.5,"price":4.5,"stock":"8","exp":"-","expired":false,"low":false},
-{"code":"56768565","name":"CONTACTO 1L","cost":2.8,"price":5,"stock":"4","exp":"2027-10-01","expired":false,"low":false},
-{"code":"00009","name":"BANALPIX 1L","cost":12.07,"price":17,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"9999911","name":"FILOSO 500ML","cost":1.5,"price":4,"stock":"14","exp":"2027-08-25","expired":false,"low":false},
-{"code":"-","name":"BONBA AGROSPRAYER 20L","cost":15,"price":20,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"1212H1","name":"MOSKITION 500G","cost":3.75,"price":6,"stock":"7","exp":"2027-09-01","expired":false,"low":false},
-{"code":"00027","name":"NOVAK-700 200KG","cost":4.5,"price":7,"stock":"14","exp":"2027-05-10","expired":false,"low":false},
-{"code":"2211","name":"BIOBONB 1L","cost":10.76,"price":14.5,"stock":"27","exp":"2029-01-31","expired":false,"low":false},
-{"code":"0E12","name":"SHY 500ML","cost":4.5,"price":6.5,"stock":"3","exp":"2027-12-01","expired":false,"low":true},
-{"code":"866453","name":"CANATREX 1K","cost":13.5,"price":17,"stock":"18","exp":"2027-04-22","expired":false,"low":false},
-{"code":"88898","name":"ESLABÓN CACAO 1L","cost":13.14,"price":18,"stock":"25","exp":"2028-10-29","expired":false,"low":false},
-{"code":"20","name":"ZOIL 1L","cost":18,"price":25,"stock":"23","exp":"2028-08-19","expired":false,"low":false},
-{"code":"00454","name":"SENATOR 1L","cost":2.75,"price":6,"stock":"27","exp":"2027-09-19","expired":false,"low":false},
-{"code":"8897675","name":"GESAPRIM 1K","cost":10.98,"price":11,"stock":"5","exp":"-","expired":false,"low":false},
-{"code":"G4242","name":"COMPLEFOL INICIO 1K","cost":2.87,"price":4.5,"stock":"9","exp":"-","expired":false,"low":false},
-{"code":"5463","name":"MAXICROP 500ML","cost":6,"price":8,"stock":"1","exp":"2025-08-01","expired":true,"low":true},
-{"code":"-","name":"INDUCPRO ZINC 1L","cost":14,"price":16.25,"stock":"7","exp":"2028-06-13","expired":false,"low":false},
-{"code":"087652D","name":"AGROPEGA 1L","cost":3.25,"price":5,"stock":"9","exp":"2027-12-01","expired":false,"low":false},
-{"code":"19","name":"GATILLER 500ML","cost":6.12,"price":8.5,"stock":"10","exp":"2028-10-09","expired":false,"low":false},
-{"code":"E34","name":"AGROSTEMIN 200G","cost":6.01,"price":8.5,"stock":"25","exp":"2028-02-01","expired":false,"low":false},
-{"code":"77778","name":"COMBIPLUS 1L","cost":5.5,"price":8.5,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"00012","name":"SEICAN","cost":25,"price":30.25,"stock":"8","exp":"2027-04-01","expired":false,"low":false},
-{"code":"00019","name":"AZUFROL-FUNGICIDA 1KG","cost":3,"price":4,"stock":"24","exp":"2027-07-01","expired":false,"low":false},
-{"code":"00023","name":"KILLER 1L","cost":3.5,"price":6,"stock":"20","exp":"-","expired":false,"low":false},
-{"code":"T67565","name":"PROMET CALCIO 1L","cost":18.36,"price":22,"stock":"1","exp":"2025-01-01","expired":true,"low":true},
-{"code":"J897","name":"CPF KONTROL","cost":2.5,"price":3.5,"stock":"4","exp":"2027-07-01","expired":false,"low":false},
-{"code":"3434","name":"LEOSIL PREMIUM 1L","cost":10.76,"price":14.5,"stock":"17","exp":"2028-09-06","expired":false,"low":false},
-{"code":"15","name":"DIABOLO 500ML","cost":6,"price":9,"stock":"5","exp":"2026-10-10","expired":false,"low":false},
-{"code":"5454","name":"ESLABÓN CACAO 500ML","cost":6.65,"price":9.5,"stock":"44","exp":"-","expired":false,"low":false},
-{"code":"444","name":"COMBO FINALIZADOR AGROPROECO","cost":11,"price":16,"stock":"15","exp":"-","expired":false,"low":false},
-{"code":"-","name":"CUSAMIZN 250ML","cost":1,"price":7.5,"stock":"23","exp":"-","expired":false,"low":false},
-{"code":"54542","name":"VULTUR 500ML","cost":5,"price":8,"stock":"11","exp":"2027-10-01","expired":false,"low":false},
-{"code":"8876554","name":"SENATOR GALON","cost":10,"price":18,"stock":"4","exp":"2027-09-19","expired":false,"low":false},
-{"code":"3334343","name":"COMBO GROW","cost":13,"price":18,"stock":"10","exp":"-","expired":false,"low":false},
-{"code":"096644","name":"ALTERNO 60W 16G","cost":1,"price":5,"stock":"15","exp":"-","expired":false,"low":false},
-{"code":"345645","name":"SUGARINE 500 GALON","cost":23.65,"price":29,"stock":"1","exp":"2026-01-14","expired":true,"low":true},
-{"code":"-","name":"SACO LEOSIL FINO","cost":12,"price":28,"stock":"0","exp":"-","expired":false,"low":false,"outofstock":true},
-{"code":"00017","name":"MUNDANO-FUNGICIDA 1L","cost":15.8,"price":18,"stock":"7","exp":"2027-02-25","expired":false,"low":false},
-{"code":"13424","name":"METABOLIK 250ML","cost":9.5,"price":14,"stock":"34","exp":"2027-09-29","expired":false,"low":false},
-{"code":"08976","name":"RESBACTERS 1L","cost":20.16,"price":28.5,"stock":"2","exp":"2027-10-20","expired":false,"low":true},
-{"code":"666867564","name":"CONTACTO 500ML","cost":1.8,"price":3,"stock":"8","exp":"2027-02-01","expired":false,"low":false},
-{"code":"00013","name":"JARUCO FUNGICIDA 250ML","cost":12,"price":15,"stock":"1","exp":"-","expired":false,"low":true},
-{"code":"00031","name":"PONCHO DE AGUAS 500G","cost":4,"price":8,"stock":"2","exp":"2027-10-01","expired":false,"low":true},
-{"code":"13","name":"KEEPER 1L","cost":16,"price":23,"stock":"1","exp":"2028-01-01","expired":false,"low":true}
-];
+// ── WORKER URL (guardado en localStorage) ──
+let WORKER_URL = localStorage.getItem('agro_worker_url') || '';
 
-const PROD_ICONS = {fungicida:'🍄',herbicida:'🌿',insect:'🐛',fertiliz:'🌱',cobre:'🟤',calcio:'🦴',zinc:'⚡',magnesio:'💚',nitro:'💛',potasio:'🍃',combo:'📦',saco:'🎒',caneca:'🪣',bonba:'💧',default:'🧪'};
-
-function prodIcon(name){
-  const n=name.toLowerCase();
-  if(n.includes('fungic')||n.includes('fungil')||n.includes('kopercup')||n.includes('labicuper')||n.includes('mundano')||n.includes('jaruco')||n.includes('azufrol')||n.includes('seican')||n.includes('xstrata')) return '🍄';
-  if(n.includes('herbic')||n.includes('glyfosad')||n.includes('glufone')||n.includes('crisquat')||n.includes('explorer')||n.includes('arrasador')||n.includes('caneca glyfosad')) return '🌿';
-  if(n.includes('mosqui')||n.includes('moskition')||n.includes('killer')||n.includes('permit')||n.includes('attamix')||n.includes('filoso')||n.includes('vultur')||n.includes('galerna')||n.includes('kañon')||n.includes('caballo')) return '🐛';
+function prodIcon(n){
+  n=n.toLowerCase();
+  if(n.includes('fungic')||n.includes('kopercup')||n.includes('labicuper')||n.includes('mundano')||n.includes('jaruco')||n.includes('azufrol')||n.includes('seican')||n.includes('xstrata')) return '🍄';
+  if(n.includes('herbic')||n.includes('glyfosad')||n.includes('glufone')||n.includes('crisquat')||n.includes('explorer')||n.includes('arrasador')) return '🌿';
+  if(n.includes('moskition')||n.includes('killer')||n.includes('permit')||n.includes('attamix')||n.includes('filoso')||n.includes('vultur')||n.includes('galerna')||n.includes('kañon')||n.includes('caballo')||n.includes('matasec')) return '🐛';
   if(n.includes('combo')) return '📦';
   if(n.includes('saco')) return '🎒';
   if(n.includes('caneca')) return '🪣';
   if(n.includes('bonba')||n.includes('bomba')) return '💧';
-  if(n.includes('cobre')||n.includes('copper')) return '🟤';
-  if(n.includes('calcio')) return '🦴';
-  if(n.includes('zinc')) return '⚡';
-  if(n.includes('magnesio')) return '💚';
-  if(n.includes('nitro')||n.includes('zeanitro')) return '💛';
   if(n.includes('raiz')||n.includes('eslabon')||n.includes('inducflor')||n.includes('inducpro')) return '🌱';
   if(n.includes('ph')) return '🔬';
+  if(n.includes('calcio')||n.includes('cobre')||n.includes('zinc')||n.includes('magnesio')||n.includes('boro')) return '⚗️';
   return '🧪';
 }
 
-let currentFilter='todos';
-let currentImageBase64=null;
-let currentScreen='home';
+let imgBase64=null, imgMime=null;
 
-// Stats
-function updateStats(){
-  document.getElementById('stat-total').textContent=PRODUCTS.length;
-  document.getElementById('stat-low').textContent=PRODUCTS.filter(p=>p.low||p.outofstock).length;
-  document.getElementById('stat-exp').textContent=PRODUCTS.filter(p=>p.expired).length;
+function goTo(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
+  const n=document.getElementById('nav-'+s);
+  if(n) n.classList.add('on');
+  if(s==='config') document.getElementById('worker-url').value=WORKER_URL;
+  checkWornerWarn();
 }
 
-function goTo(screen){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+screen).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const ni=document.getElementById('nav-'+screen);
-  if(ni) ni.classList.add('active');
-  currentScreen=screen;
-  if(screen==='catalog') renderCatalog(PRODUCTS);
+function checkWornerWarn(){
+  document.getElementById('home-worker-warn').style.display=WORKER_URL?'none':'block';
 }
 
-function switchTab(tab){
-  document.getElementById('tab-photo').style.display=tab==='photo'?'flex':'none';
-  document.getElementById('tab-text').style.display=tab==='text'?'flex':'none';
-  document.getElementById('photo-tab').style.color=tab==='photo'?'var(--green)':'var(--muted)';
-  document.getElementById('photo-tab').style.borderBottomColor=tab==='photo'?'var(--green)':'transparent';
-  document.getElementById('text-tab').style.color=tab==='text'?'var(--green)':'var(--muted)';
-  document.getElementById('text-tab').style.borderBottomColor=tab==='text'?'var(--green)':'transparent';
+function switchTab(t){
+  document.getElementById('tab-photo').style.display=t==='photo'?'flex':'none';
+  document.getElementById('tab-text').style.display=t==='text'?'flex':'none';
+  document.getElementById('tab-photo-btn').className='tab '+(t==='photo'?'on':'off');
+  document.getElementById('tab-text-btn').className='tab '+(t==='text'?'on':'off');
 }
 
-function handleFile(input){
-  if(!input.files||!input.files[0]) return;
-  const file=input.files[0];
-  const reader=new FileReader();
-  reader.onload=function(e){
-    currentImageBase64=e.target.result.split(',')[1];
-    document.getElementById('preview-img').src=e.target.result;
-    document.getElementById('preview-container').style.display='block';
-    document.getElementById('upload-zone').style.display='none';
-    document.getElementById('analyze-photo-btn').disabled=false;
+function handleFile(inp){
+  if(!inp.files||!inp.files[0]) return;
+  const file=inp.files[0];
+  imgMime=file.type||'image/jpeg';
+  const r=new FileReader();
+  r.onload=e=>{
+    imgBase64=e.target.result.split(',')[1];
+    document.getElementById('prev-img').src=e.target.result;
+    document.getElementById('prev-cont').style.display='block';
+    document.getElementById('uzone').style.display='none';
+    document.getElementById('btn-photo').disabled=false;
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(file);
 }
 
-function removeImage(){
-  currentImageBase64=null;
-  document.getElementById('preview-img').src='';
-  document.getElementById('preview-container').style.display='none';
-  document.getElementById('upload-zone').style.display='flex';
-  document.getElementById('analyze-photo-btn').disabled=true;
+function removeImg(){
+  imgBase64=null;imgMime=null;
+  document.getElementById('prev-img').src='';
+  document.getElementById('prev-cont').style.display='none';
+  document.getElementById('uzone').style.display='flex';
+  document.getElementById('btn-photo').disabled=true;
   document.getElementById('file-input').value='';
   document.getElementById('cam-input').value='';
 }
 
-function showLoading(show,txt='Analizando tu planta...'){
-  const el=document.getElementById('loading-overlay');
-  document.getElementById('loading-text').textContent=txt;
-  el.classList.toggle('show',show);
+function showLoad(v,t='Analizando tu planta...'){
+  document.getElementById('ltxt').textContent=t;
+  document.getElementById('loverlay').classList.toggle('show',v);
 }
 
-function getProductList(){
-  return PRODUCTS.filter(p=>!p.expired&&!p.outofstock).map(p=>`- ${p.name} ($${p.price})`).join('\n');
-}
+async function doAnalyze(type){
+  if(!WORKER_URL){
+    alert('⚠️ Primero configura la URL del servidor en ⚙️ Configurar.');
+    goTo('config');return;
+  }
+  if(type==='image'&&!imgBase64){alert('Selecciona una imagen primero.');return;}
+  if(type==='text'){
+    const t=document.getElementById('symptoms').value.trim();
+    if(t.length<10){alert('Describe los síntomas con más detalle.');return;}
+  }
 
-async function analyzeImage(){
-  if(!currentImageBase64) return;
-  showLoading(true,'Analizando imagen de tu cultivo...');
-  
-  const productList=getProductList();
-  const prompt=`Eres un agrónomo experto en cultivos tropicales de Ecuador. Analiza esta imagen de una planta o cultivo.
+  showLoad(true, type==='image'?'Analizando imagen...':'Diagnosticando síntomas...');
 
-Debes responder SOLO en JSON con esta estructura exacta (sin texto adicional, sin markdown):
-{
-  "planta": "nombre de la planta o cultivo identificado",
-  "condicion": "descripción breve del estado general",
-  "severidad": 60,
-  "diagnostico": "Explicación detallada en 3-4 oraciones de qué le pasa a la planta, qué causa el problema, cómo afecta",
-  "productos_recomendados": [
-    {"nombre": "NOMBRE EXACTO DEL PRODUCTO DE LA LISTA", "razon": "por qué este producto ayuda específicamente", "prioridad": "alta"},
-    {"nombre": "OTRO PRODUCTO", "razon": "razón", "prioridad": "media"}
-  ],
-  "consejos": ["consejo 1 de aplicación", "consejo 2", "consejo 3"],
-  "estado_icono": "🚨"
-}
+  try{
+    const body=type==='image'
+      ?{type:'image',image:imgBase64,mimeType:imgMime}
+      :{type:'text',text:document.getElementById('symptoms').value.trim()};
 
-IMPORTANTE: 
-- severidad es un número del 0 al 100
-- estado_icono: usa 🚨 si severo, ⚠️ si moderado, ✅ si saludable
-- productos_recomendados: selecciona SOLO de esta lista de productos disponibles en la tienda, máximo 4:
-${productList}
-- Si la planta está sana, explícalo y recomienda fertilizantes o preventivos de la lista
-- Los nombres deben coincidir EXACTAMENTE con los de la lista`;
-
-  try {
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch(WORKER_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:currentImageBase64}},
-          {type:'text',text:prompt}
-        ]}]
-      })
+      body:JSON.stringify(body)
     });
-    const data=await response.json();
-    const text=data.content.map(i=>i.text||'').join('');
-    const clean=text.replace(/```json|```/g,'').trim();
-    const result=JSON.parse(clean);
-    showLoading(false);
-    renderResult(result,document.getElementById('preview-img').src);
-  } catch(e){
-    showLoading(false);
-    alert('Error al analizar la imagen. Verifica tu conexión.');
+
+    if(!res.ok) throw new Error('Error del servidor: '+res.status);
+    const data=await res.json();
+    if(data.error) throw new Error(data.error);
+
+    showLoad(false);
+    renderResult(data, type==='image'?document.getElementById('prev-img').src:null);
+  }catch(e){
+    showLoad(false);
+    alert('❌ Error: '+e.message+'\n\nVerifica que el Worker esté activo y la URL sea correcta.');
     console.error(e);
   }
 }
 
-async function analyzeText(){
-  const symptoms=document.getElementById('symptoms-text').value.trim();
-  if(!symptoms||symptoms.length<10){alert('Por favor describe los síntomas con más detalle.');return;}
-  showLoading(true,'Diagnosticando síntomas...');
-  
-  const productList=getProductList();
-  const prompt=`Eres un agrónomo experto en cultivos tropicales de Ecuador. El agricultor describe estos síntomas:
+function renderResult(r,imgSrc){
+  document.getElementById('rimg').innerHTML=imgSrc
+    ?`<img src="${imgSrc}" style="width:100%;max-height:190px;object-fit:cover;display:block">`:'';
 
-"${symptoms}"
+  document.getElementById('rbadge').textContent=(r.icono||'🔍')+' Diagnóstico IA';
+  document.getElementById('rplant').textContent=r.planta||'Planta analizada';
+  document.getElementById('rcond').textContent=r.condicion||'';
 
-Responde SOLO en JSON (sin texto adicional, sin markdown):
-{
-  "planta": "planta/cultivo mencionado o inferido",
-  "condicion": "condición identificada",
-  "severidad": 50,
-  "diagnostico": "Explicación detallada en 3-4 oraciones: qué enfermedad o problema tiene, qué lo causa, cómo se desarrolla y qué puede pasar si no se trata",
-  "productos_recomendados": [
-    {"nombre": "NOMBRE EXACTO DEL PRODUCTO", "razon": "por qué ayuda", "prioridad": "alta"},
-    {"nombre": "OTRO PRODUCTO", "razon": "razón", "prioridad": "media"}
-  ],
-  "consejos": ["consejo de aplicación 1", "consejo 2", "consejo de prevención"],
-  "estado_icono": "⚠️"
-}
-
-IMPORTANTE:
-- severidad: 0-100
-- estado_icono: 🚨 severo, ⚠️ moderado, ✅ leve/saludable  
-- productos_recomendados: SOLO de esta lista disponible en tienda (máximo 4):
-${productList}
-- Los nombres deben coincidir EXACTAMENTE con los de la lista`;
-
-  try {
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data=await response.json();
-    const text=data.content.map(i=>i.text||'').join('');
-    const clean=text.replace(/```json|```/g,'').trim();
-    const result=JSON.parse(clean);
-    showLoading(false);
-    renderResult(result,null);
-  } catch(e){
-    showLoading(false);
-    alert('Error al procesar el diagnóstico.');
-    console.error(e);
-  }
-}
-
-function renderResult(r, imgSrc){
-  // Image
-  const imgCont=document.getElementById('result-img-container');
-  imgCont.innerHTML=imgSrc?`<img src="${imgSrc}" style="width:100%;max-height:200px;object-fit:cover;display:block">`:'';
-  
-  // Hero
-  document.getElementById('result-badge').textContent=`${r.estado_icono} Diagnóstico IA`;
-  document.getElementById('result-plant').textContent=r.planta||'Planta analizada';
-  document.getElementById('result-status').textContent=r.condicion||'';
-
-  // Severity color
   const sev=r.severidad||50;
-  const sevClass=sev<30?'low':sev<65?'mid':'high';
-  
-  // Hero color based on severity
-  const heroEl=document.querySelector('.result-hero');
-  heroEl.style.background=sev>=65?'var(--danger)':sev>=30?'#b07d00':'var(--green)';
+  const sc=sev<30?'sev-low':sev<65?'sev-mid':'sev-high';
+  document.getElementById('rhero').style.background=
+    sev>=65?'var(--danger)':sev>=30?'#b07d00':'var(--green)';
 
-  // Products
-  const prods=r.productos_recomendados||[];
-  let prodsHtml='<div class="products-grid">';
+  const prods=(r.productos||[]);
+  let ph='<div class="prods">';
   prods.forEach((p,i)=>{
-    const prod=PRODUCTS.find(x=>x.name.trim()===p.nombre.trim());
-    const price=prod?`$${prod.price}`:'Consultar';
-    const isTop=i===0||p.prioridad==='alta';
-    prodsHtml+=`<div class="product-rec ${isTop?'top':''}">
-      ${isTop?'<span class="pr-badge">⭐ Recomendado principal</span>':''}
-      <div class="pr-name">${prodIcon(p.nombre)} ${p.nombre}</div>
-      <div class="pr-reason">${p.razon}</div>
-      <div class="pr-price ${isTop?'top':''}">${price}</div>
+    const top=i===0;
+    ph+=`<div class="prod ${top?'top':''}">
+      ${top?'<span class="pbadge">⭐ Principal</span>':''}
+      <div class="pname">${prodIcon(p.nombre)} ${p.nombre}</div>
+      <div class="preason">${p.razon}</div>
     </div>`;
   });
-  prodsHtml+='</div>';
+  ph+='</div>';
 
-  // Tips
-  const tips=r.consejos||[];
-  let tipsHtml='<div class="tips-list">';
+  const tips=(r.consejos||[]);
+  let th='<div class="tips">';
   tips.forEach((t,i)=>{
-    tipsHtml+=`<div class="tip-item"><div class="tip-dot">${['1️⃣','2️⃣','3️⃣','4️⃣'][i]||'•'}</div><span>${t}</span></div>`;
+    th+=`<div class="tip"><div class="tipdot">${['1️⃣','2️⃣','3️⃣'][i]||'•'}</div><span>${t}</span></div>`;
   });
-  tipsHtml+='</div>';
+  th+='</div>';
 
-  document.getElementById('result-body').innerHTML=`
-    <div class="result-card">
-      <div class="result-card-title"><span class="rticon">🔬</span>Diagnóstico detallado</div>
-      <p class="result-text">${r.diagnostico||''}</p>
-      <div class="severity-bar"><div class="severity-fill ${sevClass}" style="width:${sev}%"></div></div>
+  document.getElementById('rbody').innerHTML=`
+    <div class="rcard">
+      <div class="rctitle">🔬 Diagnóstico detallado</div>
+      <p class="rtext">${r.diagnostico||''}</p>
+      <div class="sevbar"><div class="sevfill ${sc}" style="width:${sev}%"></div></div>
       <div style="font-size:11px;color:var(--muted);display:flex;justify-content:space-between"><span>Severidad</span><span style="font-weight:800">${sev}%</span></div>
     </div>
-    <div class="result-card">
-      <div class="result-card-title"><span class="rticon">🛒</span>Productos recomendados de tu tienda</div>
-      ${prodsHtml}
+    <div class="rcard">
+      <div class="rctitle">🛒 Productos recomendados</div>
+      ${ph}
     </div>
-    <div class="result-card">
-      <div class="result-card-title"><span class="rticon">💡</span>Consejos de aplicación</div>
-      ${tipsHtml}
+    <div class="rcard">
+      <div class="rctitle">💡 Consejos de aplicación</div>
+      ${th}
     </div>
-    <button class="new-scan-btn" onclick="goTo('scan');removeImage();document.getElementById('symptoms-text').value=''">🔄 Nuevo análisis</button>
+    <button class="btn-new" onclick="goTo('scan');removeImg();document.getElementById('symptoms').value=''">🔄 Nuevo análisis</button>
   `;
-
   goTo('result');
 }
 
-// CATALOG
-function stockBadge(p){
-  if(p.outofstock) return '<span class="prod-stock stock-out">Sin stock</span>';
-  if(p.expired) return '<span class="prod-stock stock-exp">Vencido</span>';
-  if(p.low) return '<span class="prod-stock stock-low">Stock bajo</span>';
-  return `<span class="prod-stock stock-ok">${p.stock} uds</span>`;
+function saveWorker(){
+  const url=document.getElementById('worker-url').value.trim();
+  const st=document.getElementById('config-status');
+  if(!url||!url.startsWith('http')){
+    st.style.color='var(--danger)';st.textContent='⚠️ URL inválida. Debe empezar con https://';return;
+  }
+  st.style.color='var(--muted)';st.textContent='Probando conexión...';
+  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'text',text:'prueba de conexión'})})
+    .then(r=>{
+      WORKER_URL=url;
+      localStorage.setItem('agro_worker_url',url);
+      st.style.color='green';
+      st.textContent='✅ Conexión exitosa. ¡Ya puedes analizar plantas!';
+      checkWornerWarn();
+    })
+    .catch(()=>{
+      WORKER_URL=url;
+      localStorage.setItem('agro_worker_url',url);
+      st.style.color='var(--orange)';
+      st.textContent='⚠️ URL guardada. No se pudo verificar (puede que CORS bloquee el test, intenta analizar una planta).';
+      checkWornerWarn();
+    });
 }
 
-function renderCatalog(list){
-  const container=document.getElementById('catalog-list');
-  if(!list.length){container.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:14px">No se encontraron productos</div>';return;}
-  container.innerHTML=list.map(p=>`
-    <div class="prod-item">
-      <div class="prod-icon">${prodIcon(p.name)}</div>
-      <div class="prod-info">
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-code">Cód: ${p.code}</div>
-        ${stockBadge(p)}
-      </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div class="prod-price">$${p.price}</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px">Costo: $${p.cost}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function filterCatalog(q){
-  q=q.toLowerCase();
-  let list=PRODUCTS;
-  if(currentFilter==='bajo') list=list.filter(p=>p.low||p.outofstock);
-  else if(currentFilter==='vencido') list=list.filter(p=>p.expired);
-  else if(currentFilter==='ok') list=list.filter(p=>!p.low&&!p.outofstock&&!p.expired);
-  if(q) list=list.filter(p=>p.name.toLowerCase().includes(q)||p.code.toLowerCase().includes(q));
-  renderCatalog(list);
-}
-
-function setFilter(f,el){
-  currentFilter=f;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  filterCatalog(document.getElementById('cat-search').value);
-}
-
-// Init
-window.onload=function(){
-  updateStats();
+window.onload=()=>{
+  checkWornerWarn();
   setTimeout(()=>document.getElementById('splash').classList.add('hide'),1600);
 };
 </script>
