@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="AgroNaranjito">
 <title>AgroNaranjito</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
 <style>
@@ -13,29 +13,26 @@
   --green:#2d6a2d;--green2:#3d8c3d;--green-pale:#e8f5e8;
   --orange:#e8870a;--orange-pale:#fff3e0;
   --white:#fff;--bg:#f0ede4;--text:#1a2e1a;--muted:#6b7c6b;
-  --danger:#c0392b;--danger-pale:#fdecea;
-  --r:18px;--rs:10px;
+  --danger:#c0392b;--r:18px;--rs:10px;
 }
 html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);overflow:hidden}
 
-/* SPLASH */
 #splash{position:fixed;inset:0;background:var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .5s}
 #splash.hide{opacity:0;pointer-events:none}
 .spl-icon{font-size:70px;animation:bob 1.2s ease infinite alternate}
 @keyframes bob{from{transform:translateY(0)}to{transform:translateY(-12px)}}
 .spl-logo{font-family:'Fraunces',serif;font-size:40px;color:#fff;font-weight:900;margin-top:10px}
 .spl-logo span{color:#f5a623}
-.spl-sub{color:rgba(255,255,255,.7);font-size:13px;font-weight:700;margin-top:6px;letter-spacing:.4px}
+.spl-sub{color:rgba(255,255,255,.7);font-size:13px;font-weight:700;margin-top:6px}
 
-/* SHELL */
 #app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;background:var(--bg)}
-.header{background:var(--green);padding:13px 18px;display:flex;align-items:center;flex-shrink:0}
+.header{background:var(--green);padding:13px 18px;display:flex;align-items:center;flex-shrink:0;gap:10px}
 .hlogo{font-family:'Fraunces',serif;font-size:21px;color:#fff;font-weight:900}
 .hlogo span{color:#f5a623}
-.hbadge{margin-left:auto;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:11px;color:#fff;font-weight:700}
+.hcart{margin-left:auto;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 12px;font-size:12px;color:#fff;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:5px;border:none;font-family:'Nunito',sans-serif;position:relative}
+.cart-badge{background:#f5a623;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;position:absolute;top:-5px;right:-5px}
 
-/* SCREENS */
-.screen{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:76px}
+.screen{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:80px}
 .screen.active{display:flex}
 
 /* HOME */
@@ -63,12 +60,11 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
 .stitle{font-family:'Fraunces',serif;font-size:23px;font-weight:900}
 .ssub{font-size:13px;opacity:.8;margin-top:3px}
 .tabs{display:flex;background:#fff;border-bottom:1px solid #eee;flex-shrink:0}
-.tab{flex:1;padding:12px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s}
+.tab{flex:1;padding:12px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent}
 .tab.on{color:var(--green);border-bottom-color:var(--green)}
 .tab.off{color:var(--muted)}
 .sbody{padding:15px;display:flex;flex-direction:column;gap:13px}
-.uzone{background:var(--white);border-radius:var(--r);border:2.5px dashed #b5d4aa;padding:30px 18px;display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;transition:all .2s}
-.uzone:active,.uzone.drag{border-color:var(--green);background:var(--green-pale)}
+.uzone{background:var(--white);border-radius:var(--r);border:2.5px dashed #b5d4aa;padding:30px 18px;display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer}
 .uzone .uzi{font-size:50px}
 .uzone .uzt{font-size:15px;font-weight:800}
 .uzone .uzs{font-size:12px;color:var(--muted);text-align:center}
@@ -76,25 +72,15 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:#ddd}
 .btn-green{background:var(--green);color:#fff;border:none;border-radius:var(--r);padding:15px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
 .btn-green:active{background:#1e4e1e}
-.btn-orange{background:var(--orange-pale);color:#7a5230;border:none;border-radius:var(--r);padding:15px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
 .btn-analyze{background:var(--orange);color:#fff;border:none;border-radius:var(--r);padding:16px;font-size:15px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
 .btn-analyze:disabled{background:#ccc;cursor:not-allowed}
-.btn-analyze:not(:disabled):active{background:#b06000}
-#file-input,#cam-input{display:none}
 .prev-box{background:var(--white);border-radius:var(--r);overflow:hidden;position:relative}
 .prev-box img{width:100%;max-height:200px;object-fit:cover;display:block}
 .prev-box .rem{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .textarea{background:var(--white);border-radius:var(--r);border:1.5px solid #ddd;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text);width:100%;resize:none;min-height:120px;outline:none;line-height:1.6}
 .textarea:focus{border-color:var(--green)}
 .hint{background:var(--green-pale);border-radius:var(--rs);padding:11px;font-size:13px;color:var(--green);line-height:1.5}
-
-/* WORKER CONFIG */
-.config-card{background:var(--white);border-radius:var(--r);padding:15px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-.config-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.config-input{background:#f8f8f6;border:1.5px solid #e0e0d8;border-radius:var(--rs);padding:11px 13px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);width:100%;outline:none}
-.config-input:focus{border-color:var(--green)}
-.config-save{background:var(--green);color:#fff;border:none;border-radius:var(--rs);padding:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:8px}
-.config-status{font-size:12px;margin-top:6px;font-weight:700;text-align:center}
+#file-input,#cam-input{display:none}
 
 /* LOADING */
 #loverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
@@ -106,7 +92,7 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
 .lsub{font-size:12px;color:var(--muted);margin-top:4px}
 
 /* RESULT */
-.rhero{padding:18px;color:#fff;position:relative}
+.rhero{padding:18px;color:#fff}
 .rback{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:5px 13px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:10px;display:inline-flex;align-items:center;gap:4px}
 .rbadge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 11px;font-size:12px;font-weight:700;margin-bottom:7px}
 .rplant{font-family:'Fraunces',serif;font-size:25px;font-weight:900;line-height:1.2}
@@ -116,29 +102,67 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
 .rctitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:5px}
 .rtext{font-size:14px;color:var(--text);line-height:1.65}
 .sevbar{height:8px;border-radius:4px;background:#e8e8e0;margin:10px 0 4px;overflow:hidden}
-.sevfill{height:100%;border-radius:4px;transition:width .8s ease}
+.sevfill{height:100%;border-radius:4px}
 .sev-low{background:#4caf50}.sev-mid{background:#ff9800}.sev-high{background:#f44336}
-.prods{display:flex;flex-direction:column;gap:9px}
-.prod{background:var(--green-pale);border-radius:var(--rs);padding:13px;border-left:4px solid var(--green)}
-.prod.top{background:var(--orange-pale);border-left-color:var(--orange)}
-.pbadge{display:inline-block;background:var(--orange);color:#fff;border-radius:7px;font-size:10px;font-weight:800;padding:2px 8px;margin-bottom:4px}
+
+/* PRODUCT CARD en resultado */
+.prod-rec{background:#f8faf8;border-radius:var(--rs);padding:13px;border:1.5px solid #dce8dc;display:flex;flex-direction:column;gap:6px;margin-bottom:9px}
+.prod-rec-top{display:flex;align-items:flex-start;gap:10px}
+.prod-rec-info{flex:1}
 .pname{font-size:14px;font-weight:800}
-.preason{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.preason{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+.pprice{font-size:14px;font-weight:900;color:var(--green)}
+.pstock-ok{font-size:11px;color:var(--green);font-weight:700}
+.pstock-low{font-size:11px;color:var(--orange);font-weight:700}
+.pstock-none{font-size:11px;color:var(--danger);font-weight:700}
+.pbadge-top{display:inline-block;background:var(--orange);color:#fff;border-radius:7px;font-size:10px;font-weight:800;padding:2px 8px;margin-bottom:3px}
+
+/* ADD TO CART BTN */
+.btn-add{border:none;border-radius:var(--rs);padding:9px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.btn-add.add{background:var(--green);color:#fff}
+.btn-add.add:active{background:#1e4e1e}
+.btn-add.added{background:var(--green-pale);color:var(--green)}
+.btn-add.nostock{background:#f0f0f0;color:#aaa;cursor:not-allowed}
+
 .tips{display:flex;flex-direction:column;gap:8px}
 .tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.5}
 .tipdot{width:22px;height:22px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px}
-.btn-new{background:var(--green);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;margin-top:4px}
-.btn-new:active{background:#1e4e1e}
+.btn-new{background:var(--green);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%}
+
+/* CARRITO */
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;color:var(--muted)}
+.cart-empty-icon{font-size:60px}
+.cart-empty-txt{font-size:15px;font-weight:700}
+.cart-empty-sub{font-size:13px;text-align:center}
+.cart-items{padding:15px;display:flex;flex-direction:column;gap:10px}
+.cart-item{background:var(--white);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+.ci-icon{width:42px;height:42px;border-radius:11px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-price{font-size:13px;color:var(--green);font-weight:700;margin-top:2px}
+.ci-qty{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty-btn{width:26px;height:26px;border-radius:50%;border:none;background:var(--green-pale);color:var(--green);font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.qty-num{font-size:14px;font-weight:800;min-width:20px;text-align:center}
+.ci-del{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:#ccc}
+.cart-footer{padding:15px;border-top:1px solid #e8e8e0;background:var(--white);position:sticky;bottom:76px}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.ct-lbl{font-size:13px;color:var(--muted);font-weight:700}
+.ct-val{font-size:20px;font-weight:900;color:var(--green)}
+.btn-wsp{background:#25D366;color:#fff;border:none;border-radius:var(--r);padding:16px;font-size:15px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 4px 14px rgba(37,211,102,.3)}
+.btn-wsp:active{background:#1da851}
 
 /* NAV */
 .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid #e8e8e0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--muted);transition:color .2s}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--muted)}
 .ni.on{color:var(--green)}
-.ni .nio{font-size:21px;transition:transform .2s}
-.ni.on .nio{transform:scale(1.15)}
-.nc{width:54px;height:54px;border-radius:50%;background:var(--green);margin-top:-16px;box-shadow:0 4px 14px rgba(45,106,45,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:3px solid var(--bg);color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;gap:1px;transition:transform .2s}
+.ni .nio{font-size:21px}
+.nc{width:54px;height:54px;border-radius:50%;background:var(--green);margin-top:-16px;box-shadow:0 4px 14px rgba(45,106,45,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:3px solid var(--bg);color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;gap:1px}
 .nc:active{transform:scale(.93)}
 .nc .nio{font-size:19px}
+
+/* TOAST */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a2e1a;color:#fff;border-radius:20px;padding:10px 20px;font-size:13px;font-weight:700;z-index:600;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -152,40 +176,42 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
 <div id="app">
   <div class="header">
     <div class="hlogo">Agro<span>Naranjito</span></div>
-    <div class="hbadge">🌿 Agrotienda</div>
+    <button class="hcart" onclick="goTo('cart')">
+      🛒 Carrito
+      <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+    </button>
   </div>
 
+  <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="hero">
       <div class="hero-hi">Bienvenido 👋</div>
       <div class="hero-title">¿Qué le pasa a tu <span>cultivo?</span></div>
-      <div class="hero-desc">Sube una foto o describe los síntomas. Te decimos qué tiene y qué producto de nuestra tienda necesita.</div>
+      <div class="hero-desc">Sube una foto o describe los síntomas. Te recomendamos productos de nuestra tienda y los pedís por WhatsApp.</div>
     </div>
     <div class="home-body">
-      <div class="slbl">Analizar tu planta</div>
+      <div class="slbl">¿Qué quieres hacer?</div>
       <div class="grid2">
         <button class="acard full" onclick="goTo('scan')">
           <div class="aci">📸</div>
-          <div class="act">Analizar mi planta</div>
-          <div class="acd">Foto o descripción → diagnóstico + producto recomendado</div>
+          <div class="act">Diagnosticar mi planta</div>
+          <div class="acd">Foto o descripción → diagnóstico + productos recomendados</div>
         </button>
         <button class="acard" onclick="goTo('scan');setTimeout(()=>switchTab('text'),200)">
           <div class="aci">✍️</div>
           <div class="act">Describir síntomas</div>
           <div class="acd">Sin foto, solo en palabras</div>
         </button>
-        <button class="acard" onclick="goTo('config')">
-          <div class="aci">⚙️</div>
-          <div class="act">Configurar</div>
-          <div class="acd">Clave OpenRouter API</div>
+        <button class="acard" onclick="goTo('cart')">
+          <div class="aci">🛒</div>
+          <div class="act">Ver carrito</div>
+          <div class="acd">Pedido por WhatsApp</div>
         </button>
-      </div>
-      <div id="home-worker-warn" style="display:none;background:#e8f5e8;border-radius:var(--rs);padding:12px;font-size:13px;color:var(--green);line-height:1.5">
-        ✅ <strong>Conexión Directa Activada.</strong> Usando el ecosistema inteligente de OpenRouter. ¡Listo para diagnosticar!
       </div>
     </div>
   </div>
 
+  <!-- SCAN -->
   <div class="screen" id="screen-scan">
     <div class="stop">
       <div class="stitle">Analizar planta 🔬</div>
@@ -195,7 +221,6 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
       <button class="tab on" id="tab-photo-btn" onclick="switchTab('photo')">📸 Foto</button>
       <button class="tab off" id="tab-text-btn" onclick="switchTab('text')">✍️ Describir</button>
     </div>
-
     <div id="tab-photo" class="sbody">
       <div id="uzone" class="uzone" onclick="document.getElementById('file-input').click()">
         <div class="uzi">🌿</div>
@@ -206,22 +231,22 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
       <input type="file" id="cam-input" accept="image/*" capture="environment" onchange="handleFile(this)">
       <div id="prev-cont" style="display:none">
         <div class="prev-box">
-          <img id="prev-img" src="" alt="Vista previa">
+          <img id="prev-img" src="" alt="">
           <button class="rem" onclick="removeImg()">✕</button>
         </div>
       </div>
       <div class="divider">o</div>
-      <button class="btn-green" onclick="document.getElementById('cam-input').click()"><span>📷</span> Tomar foto con cámara</button>
+      <button class="btn-green" onclick="document.getElementById('cam-input').click()">📷 Tomar foto con cámara</button>
       <button class="btn-analyze" id="btn-photo" disabled onclick="doAnalyze('image')">🔍 Analizar planta</button>
     </div>
-
     <div id="tab-text" class="sbody" style="display:none">
       <div class="hint">💡 Describe lo que ves: color de hojas, manchas, insectos, deformaciones, planta afectada...</div>
-      <textarea class="textarea" id="symptoms" placeholder="Ej: Mis matas de cacao tienen manchas amarillas en las hojas, se están cayendo y veo unos insectos pequeños en el tallo..."></textarea>
+      <textarea class="textarea" id="symptoms" placeholder="Ej: Mis matas de cacao tienen manchas amarillas en las hojas, se están cayendo y veo insectos en el tallo..."></textarea>
       <button class="btn-analyze" onclick="doAnalyze('text')">🔍 Diagnosticar síntomas</button>
     </div>
   </div>
 
+  <!-- RESULT -->
   <div class="screen" id="screen-result">
     <div id="rimg"></div>
     <div class="rhero" id="rhero">
@@ -233,29 +258,19 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
     <div class="rbody" id="rbody"></div>
   </div>
 
-  <div class="screen" id="screen-config">
+  <!-- CARRITO -->
+  <div class="screen" id="screen-cart">
     <div class="stop">
-      <div class="stitle">⚙️ Configurar API Key</div>
-      <div class="ssub">Gestión interna de tu OpenRouter Token</div>
+      <div class="stitle">🛒 Tu carrito</div>
+      <div class="ssub">Revisa y pide por WhatsApp</div>
     </div>
-    <div class="sbody">
-      <div class="config-card">
-        <div class="config-label">OpenRouter API Key</div>
-        <input class="config-input" type="password" id="worker-url" placeholder="sk-or-v1-...">
-        <button class="config-save" onclick="saveWorker()">💾 Actualizar Token</button>
-        <div class="config-status" id="config-status"></div>
-      </div>
-      <div style="background:var(--white);border-radius:var(--r);padding:15px;font-size:13px;line-height:1.7;color:var(--text);box-shadow:0 1px 6px rgba(0,0,0,.06)">
-        <strong>⚙️ Modo Integrado Directo:</strong><br><br>
-        Actualmente la aplicación corre sobre la API Key por defecto de OpenRouter de forma directa en cliente HTTP. Ya no necesitas configurar Cloudflare Workers para el procesamiento de datos básicos.
-      </div>
-    </div>
+    <div id="cart-content"></div>
   </div>
 
   <nav class="bnav">
     <button class="ni on" id="nav-home" onclick="goTo('home')"><span class="nio">🏡</span>Inicio</button>
     <div class="nc" onclick="goTo('scan')"><span class="nio">🔬</span>Analizar</div>
-    <button class="ni" id="nav-config" onclick="goTo('config')"><span class="nio">⚙️</span>Config</button>
+    <button class="ni" id="nav-cart" onclick="goTo('cart')"><span class="nio">🛒</span>Carrito</button>
   </nav>
 </div>
 
@@ -267,10 +282,260 @@ html,body{height:100%;background:var(--bg);font-family:'Nunito',sans-serif;color
   </div>
 </div>
 
-<script>
-// Token por defecto provisto por el usuario
-let OPENROUTER_KEY = localStorage.getItem('agro_openrouter_key') || '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';
+<div id="toast"></div>
 
+<script>
+const WHATSAPP_NUMBER = '593939079441';
+const OPENROUTER_KEY = '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';
+
+// ===== CATÁLOGO =====
+const CATALOGO = [
+  {nombre:'PROMET COBRE 1L',precio:22,stock:1},
+  {nombre:'PAMEX 500ML',precio:6.5,stock:11},
+  {nombre:'YARA VITA 1L',precio:13,stock:4},
+  {nombre:'INDUCFLOR 500ML',precio:7,stock:29},
+  {nombre:'ZEANITRO 1L',precio:13.25,stock:4},
+  {nombre:'SACO UREA',precio:36,stock:17},
+  {nombre:'QUIMIFOL 600',precio:12,stock:6},
+  {nombre:'GREEN MASTER 250ML',precio:4,stock:6},
+  {nombre:'SACO FULLCACAO 25K',precio:18,stock:17},
+  {nombre:'LABIN LABICUAJE 500G',precio:6.5,stock:12},
+  {nombre:'CABALLO DE TROYA 1L',precio:26,stock:10},
+  {nombre:'ANGLO QUAT',precio:5,stock:16},
+  {nombre:'KAÑON 250ML',precio:5,stock:10},
+  {nombre:'KRE-SAD 500ML',precio:5,stock:5},
+  {nombre:'FUNGIL FUNGICIDA 400ML',precio:7,stock:12},
+  {nombre:'SACO SULFATO GRUESO',precio:24,stock:23},
+  {nombre:'COMBO FLORACION COMPLETO',precio:19,stock:1},
+  {nombre:'NAIROBI 250ML',precio:15,stock:12},
+  {nombre:'KILLER GALON',precio:22,stock:6},
+  {nombre:'OLIGOMIX 100G',precio:4.5,stock:6},
+  {nombre:'BIOBONB GALON',precio:58,stock:2},
+  {nombre:'CANECA GLYFOSAD',precio:80,stock:1},
+  {nombre:'MOSKITION 100G',precio:1.75,stock:2},
+  {nombre:'ATTAMIX 500G',precio:5,stock:3},
+  {nombre:'ADHESIX 100ML',precio:3.5,stock:34},
+  {nombre:'BASTNATE GALON',precio:25,stock:4},
+  {nombre:'PH CHECK 1L',precio:10,stock:5},
+  {nombre:'GLYFOSAD 480',precio:18,stock:1},
+  {nombre:'EKOTRON-40',precio:15,stock:2},
+  {nombre:'CYTOKIN 1L',precio:34.5,stock:2},
+  {nombre:'KOPERCUP 500G',precio:9.5,stock:7},
+  {nombre:'GATILLER 1L',precio:16.25,stock:16},
+  {nombre:'SACO KSIL',precio:39,stock:20},
+  {nombre:'ARRASADOR GALON',precio:25,stock:1},
+  {nombre:'INDUCPRO MAGNESIO 1L',precio:16.25,stock:10},
+  {nombre:'METRINEX 50 EQ 1L',precio:8,stock:6},
+  {nombre:'RONDO GALON',precio:25,stock:4},
+  {nombre:'CUSAMIZN 500ML',precio:14.5,stock:42},
+  {nombre:'FERTI-ORGAN GALON',precio:21,stock:3},
+  {nombre:'ESLABON RAIZ 500ML',precio:9.5,stock:18},
+  {nombre:'DOMINAL 500ML',precio:18,stock:18},
+  {nombre:'TERIGRAN GALON',precio:35,stock:1},
+  {nombre:'MATASEC 500G',precio:5,stock:0},
+  {nombre:'LABICUPER-FUNGICIDA 500ML',precio:13,stock:7},
+  {nombre:'HIGHP 500ML',precio:11,stock:21},
+  {nombre:'MOSKITION 250G',precio:3.5,stock:3},
+  {nombre:'SACO BLAUKORN',precio:82,stock:5},
+  {nombre:'MAIX 1K',precio:10,stock:3},
+  {nombre:'GLUFONE 1L',precio:6,stock:31},
+  {nombre:'ESLABON RAIZ 1L',precio:18,stock:9},
+  {nombre:'RAINBOTURBO 1L',precio:10,stock:7},
+  {nombre:'KALEX 1L',precio:20,stock:7},
+  {nombre:'GLYFOSAD 480 1L',precio:6.5,stock:9},
+  {nombre:'OLIMPO 1L',precio:13.5,stock:18},
+  {nombre:'GALERNA 1K',precio:12,stock:3},
+  {nombre:'SALAM 1L',precio:12.5,stock:15},
+  {nombre:'TRIPLEXAC 1L',precio:10,stock:10},
+  {nombre:'LABIOFOL SUGAR K 1L',precio:11,stock:5},
+  {nombre:'SACO LEOSIL GRUESO',precio:30,stock:37},
+  {nombre:'HERVITAM',precio:40,stock:4},
+  {nombre:'FINIDOR 100ML',precio:8.5,stock:19},
+  {nombre:'KMELOT 100G',precio:6,stock:9},
+  {nombre:'SACO MURIATO',precio:31,stock:7},
+  {nombre:'FLASH 500ML',precio:7,stock:10},
+  {nombre:'EXPLORER-HERBICIDA 1L',precio:8.5,stock:12},
+  {nombre:'COMBO SUPER KIT NUTRICIONAL',precio:28,stock:2},
+  {nombre:'KALEX 500CC',precio:10.5,stock:12},
+  {nombre:'MIROS 500CC',precio:14.5,stock:18},
+  {nombre:'CUSAMIZN 1L',precio:28.5,stock:12},
+  {nombre:'ZOIL 500ML',precio:13,stock:22},
+  {nombre:'ROMEX 1KG',precio:12,stock:3},
+  {nombre:'FUNGISEI 500ML',precio:13.75,stock:8},
+  {nombre:'SACO PEPA DE ORO',precio:29,stock:30},
+  {nombre:'VIRSANB GALON',precio:80,stock:3},
+  {nombre:'COMPLEFOL FLORACION 1K',precio:4.4,stock:5},
+  {nombre:'SACO LEOSIL',precio:28,stock:140},
+  {nombre:'KYLATE 100ML',precio:2,stock:17},
+  {nombre:'CLOROTEX 75',precio:8,stock:3},
+  {nombre:'CONFIABLE 500ML',precio:10,stock:10},
+  {nombre:'KILLER 500ML',precio:3.5,stock:7},
+  {nombre:'INDUCPRO CALCIO 1L',precio:16.25,stock:11},
+  {nombre:'MULTIFIX 100ML',precio:2.5,stock:8},
+  {nombre:'FUERZA VERDE 1KG',precio:5,stock:4},
+  {nombre:'PERMITT-50',precio:7.5,stock:26},
+  {nombre:'CABALLO DE TROYA 500ML',precio:13.25,stock:7},
+  {nombre:'PAMEX 1L',precio:10,stock:11},
+  {nombre:'QUIMIFOL 510',precio:8.5,stock:1},
+  {nombre:'CRISQUAT-D HERBICIDA',precio:9,stock:16},
+  {nombre:'INDUCFLOR 1L',precio:13,stock:10},
+  {nombre:'COMPLEFOL ENGROSE 1K',precio:4.5,stock:8},
+  {nombre:'CONTACTO 1L',precio:5,stock:4},
+  {nombre:'BANALPIX 1L',precio:17,stock:1},
+  {nombre:'FILOSO 500ML',precio:4,stock:13},
+  {nombre:'BONBA AGROSPRAYER 20L',precio:20,stock:10},
+  {nombre:'MOSKITION 500G',precio:6,stock:7},
+  {nombre:'NOVAK-700 200KG',precio:7,stock:14},
+  {nombre:'BIOBONB 1L',precio:14.5,stock:27},
+  {nombre:'SHY 500ML',precio:6.5,stock:2},
+  {nombre:'CANATREX 1K',precio:17,stock:18},
+  {nombre:'ESLABÓN CACAO 1L',precio:18,stock:25},
+  {nombre:'ZOIL 1L',precio:25,stock:23},
+  {nombre:'SENATOR 1L',precio:6,stock:27},
+  {nombre:'GESAPRIM 1K',precio:11,stock:5},
+  {nombre:'COMPLEFOL INICIO 1K',precio:4.5,stock:9},
+  {nombre:'INDUCPRO ZINC 1L',precio:16.25,stock:7},
+  {nombre:'AGROPEGA 1L',precio:5,stock:9},
+  {nombre:'GATILLER 500ML',precio:8.5,stock:10},
+  {nombre:'AGROSTEMIN 200G',precio:8.5,stock:25},
+  {nombre:'COMBIPLUS 1L',precio:8.5,stock:10},
+  {nombre:'SEICAN',precio:30.25,stock:8},
+  {nombre:'AZUFROL-FUNGICIDA 1KG',precio:4,stock:24},
+  {nombre:'KILLER 1L',precio:6,stock:20},
+  {nombre:'METABOLIK 250ML',precio:14,stock:34},
+  {nombre:'RESBACTERS 1L',precio:28.5,stock:2},
+  {nombre:'CONTACTO 500ML',precio:3,stock:8},
+  {nombre:'JARUCO FUNGICIDA 250ML',precio:15,stock:1},
+  {nombre:'PONCHO DE AGUAS 500G',precio:8,stock:2},
+  {nombre:'KEEPER 1L',precio:23,stock:1},
+  {nombre:'VULTUR 500ML',precio:8,stock:11},
+  {nombre:'SENATOR GALON',precio:18,stock:4},
+  {nombre:'COMBO GROW',precio:18,stock:10},
+  {nombre:'ALTERNO 60W 16G',precio:5,stock:15},
+  {nombre:'SACO LEOSIL FINO',precio:28,stock:140},
+  {nombre:'SACO FERTIBON CACAO',precio:38,stock:34},
+  {nombre:'MUNDANO-FUNGICIDA 1L',precio:18,stock:7},
+  {nombre:'SACO 8 20 20',precio:29,stock:51},
+  {nombre:'ESLABÓN CACAO 500ML',precio:9.5,stock:44},
+  {nombre:'COMBO FINALIZADOR AGROPROECO',precio:16,stock:15},
+  {nombre:'CUSAMIZN 250ML',precio:7.5,stock:23},
+  {nombre:'HACHA-ROSS 1L',precio:9,stock:2},
+  {nombre:'LEOSIL PREMIUM 1L',precio:14.5,stock:17},
+  {nombre:'DIABOLO 500ML',precio:9,stock:5},
+  {nombre:'COMBO COMPLEMENTO',precio:21,stock:1},
+  {nombre:'XSTRATA GOLD FUNGICIDA 250ML',precio:12,stock:3},
+  {nombre:'LABIN RAIZ',precio:8,stock:3}
+];
+
+// ===== CARRITO =====
+let carrito = []; // [{nombre, precio, qty}]
+
+function cartTotal(){
+  return carrito.reduce((s,i)=>s+(i.precio*i.qty),0);
+}
+function cartCount(){
+  return carrito.reduce((s,i)=>s+i.qty,0);
+}
+function updateCartBadge(){
+  const b = document.getElementById('cart-badge');
+  const n = cartCount();
+  b.textContent = n;
+  b.style.display = n>0?'flex':'none';
+}
+function addToCart(nombre, precio){
+  const ex = carrito.find(i=>i.nombre===nombre);
+  if(ex){ ex.qty++; }
+  else { carrito.push({nombre,precio,qty:1}); }
+  updateCartBadge();
+  showToast('🛒 '+nombre.split(' ').slice(0,2).join(' ')+' agregado');
+  renderCartBtns();
+}
+function removeFromCart(nombre){
+  carrito = carrito.filter(i=>i.nombre!==nombre);
+  updateCartBadge();
+  renderCartBtns();
+  renderCart();
+}
+function changeQty(nombre, delta){
+  const ex = carrito.find(i=>i.nombre===nombre);
+  if(!ex) return;
+  ex.qty += delta;
+  if(ex.qty<=0) removeFromCart(nombre);
+  else { updateCartBadge(); renderCartBtns(); renderCart(); }
+}
+function isInCart(nombre){
+  return carrito.some(i=>i.nombre===nombre);
+}
+
+function renderCartBtns(){
+  // re-render add buttons in result screen if visible
+  document.querySelectorAll('[data-prod-btn]').forEach(btn=>{
+    const nombre = btn.getAttribute('data-prod-btn');
+    const stock = parseInt(btn.getAttribute('data-stock'));
+    if(stock===0){
+      btn.className='btn-add nostock';
+      btn.innerHTML='Sin stock';
+    } else if(isInCart(nombre)){
+      btn.className='btn-add added';
+      btn.innerHTML='✅ En carrito';
+    } else {
+      btn.className='btn-add add';
+      btn.innerHTML='➕ Agregar';
+    }
+  });
+}
+
+function renderCart(){
+  const el = document.getElementById('cart-content');
+  if(carrito.length===0){
+    el.innerHTML=`<div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <div class="cart-empty-txt">Tu carrito está vacío</div>
+      <div class="cart-empty-sub">Diagnostica tu planta y agrega los productos que necesitas</div>
+    </div>`;
+    return;
+  }
+  let html='<div class="cart-items">';
+  carrito.forEach(item=>{
+    html+=`<div class="cart-item">
+      <div class="ci-icon">${prodIcon(item.nombre)}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.nombre}</div>
+        <div class="ci-price">$${(item.precio*item.qty).toFixed(2)}</div>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="changeQty('${item.nombre}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.nombre}',1)">+</button>
+        </div>
+      </div>
+      <button class="ci-del" onclick="removeFromCart('${item.nombre}')">🗑️</button>
+    </div>`;
+  });
+  html+='</div>';
+  html+=`<div class="cart-footer">
+    <div class="cart-total">
+      <span class="ct-lbl">Total estimado</span>
+      <span class="ct-val">$${cartTotal().toFixed(2)}</span>
+    </div>
+    <button class="btn-wsp" onclick="pedirPorWhatsApp()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Pedir por WhatsApp
+    </button>
+  </div>`;
+  el.innerHTML = html;
+}
+
+function pedirPorWhatsApp(){
+  if(carrito.length===0) return;
+  let msg = `🌱 *Pedido AgroNaranjito*\n\n`;
+  carrito.forEach((item,i)=>{
+    msg += `${i+1}. ${item.nombre} x${item.qty} — $${(item.precio*item.qty).toFixed(2)}\n`;
+  });
+  msg += `\n💵 *Total: $${cartTotal().toFixed(2)}*\n\n¿Tienen disponibilidad? ¡Quiero hacer mi pedido! 🙏`;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ===== HELPERS =====
 function prodIcon(n){
   n=n.toLowerCase();
   if(n.includes('fungic')||n.includes('kopercup')||n.includes('labicuper')||n.includes('mundano')||n.includes('jaruco')||n.includes('azufrol')||n.includes('seican')||n.includes('xstrata')) return '🍄';
@@ -281,12 +546,15 @@ function prodIcon(n){
   if(n.includes('caneca')) return '🪣';
   if(n.includes('bonba')||n.includes('bomba')) return '💧';
   if(n.includes('raiz')||n.includes('eslabon')||n.includes('inducflor')||n.includes('inducpro')) return '🌱';
-  if(n.includes('ph')) return '🔬';
-  if(n.includes('calcio')||n.includes('cobre')||n.includes('zinc')||n.includes('magnesio')||n.includes('boro')) return '⚗️';
   return '🧪';
 }
 
-let imgBase64=null, imgMime=null;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
 
 function goTo(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -294,12 +562,7 @@ function goTo(s){
   document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
   const n=document.getElementById('nav-'+s);
   if(n) n.classList.add('on');
-  if(s==='config') document.getElementById('worker-url').value=OPENROUTER_KEY;
-  checkWorkerWarn();
-}
-
-function checkWorkerWarn(){
-  document.getElementById('home-worker-warn').style.display='block';
+  if(s==='cart') renderCart();
 }
 
 function switchTab(t){
@@ -309,10 +572,10 @@ function switchTab(t){
   document.getElementById('tab-text-btn').className='tab '+(t==='text'?'on':'off');
 }
 
+let imgBase64=null, imgMime=null;
 function handleFile(inp){
   if(!inp.files||!inp.files[0]) return;
-  const file=inp.files[0];
-  imgMime=file.type||'image/jpeg';
+  const file=inp.files[0]; imgMime=file.type||'image/jpeg';
   const r=new FileReader();
   r.onload=e=>{
     imgBase64=e.target.result.split(',')[1];
@@ -323,7 +586,6 @@ function handleFile(inp){
   };
   r.readAsDataURL(file);
 }
-
 function removeImg(){
   imgBase64=null;imgMime=null;
   document.getElementById('prev-img').src='';
@@ -333,127 +595,119 @@ function removeImg(){
   document.getElementById('file-input').value='';
   document.getElementById('cam-input').value='';
 }
-
-function showLoad(v,t='Analizando tu planta...'){
+function showLoad(v,t='Analizando...'){
   document.getElementById('ltxt').textContent=t;
   document.getElementById('loverlay').classList.toggle('show',v);
 }
 
+// ===== IA =====
 async function doAnalyze(type){
-  if(!OPENROUTER_KEY){
-    alert('⚠️ Por favor ingresa una clave de API válida en la sección de configuración.');
-    goTo('config'); return;
-  }
   if(type==='image'&&!imgBase64){alert('Selecciona una imagen primero.');return;}
-  
-  let userContent = "";
+  let userContent='';
   if(type==='text'){
-    userContent = document.getElementById('symptoms').value.trim();
+    userContent=document.getElementById('symptoms').value.trim();
     if(userContent.length<10){alert('Describe los síntomas con más detalle.');return;}
   }
+  showLoad(true, type==='image'?'Analizando imagen...':'Diagnosticando síntomas...');
 
-  showLoad(true, type==='image'?'Analizando imagen con IA...':'Diagnosticando síntomas con IA...');
+  const catalogoLista = CATALOGO.map(p=>`- ${p.nombre} ($${p.precio})`).join('\n');
+  const systemPrompt = `Eres el agrónomo digital de "AgroNaranjito" en Ecuador. Diagnosticas problemas de cultivos y recomiendas ÚNICAMENTE productos del siguiente catálogo real:
 
-  // El prompt del sistema fuerza la estructura JSON requerida por la UI
-  const systemPrompt = `Eres un experto agrónomo botánico y asesor técnico de la agrotienda "AgroNaranjito". Tu tarea es diagnosticar el problema del cultivo (enfermedad, plaga o deficiencia) y recomendar soluciones específicas de tienda. 
-  DEBES responder UNICAMENTE con un objeto JSON válido, sin textos alternos, Markdown ni bloques de código.
-  Estructura esperada:
-  {
-    "planta": "Nombre del cultivo común (Ej: Cacao, Banano, Maíz, etc.)",
-    "condicion": "Nombre común de la enfermedad, hongo o plaga diagnosticada",
-    "estado_icono": "Un emoji adecuado (Ej: 🐛, 🍄, 🍂)",
-    "severidad": un número entero de 1 al 100 que represente el daño visualmente,
-    "diagnostico": "Una explicación profesional clara y directa de los síntomas encontrados, causas y consecuencias si no se trata.",
-    "productos_recomendados": [
-      { "nombre": "Nombre del Producto Comercial (Ej: Labicuper, Azufrol, Filoso, KoperCup)", "razon": "Explicación corta de por qué usar este producto y cómo actúa contra la afección" }
-    ],
-    "consejos": [
-      "Consejo cultural o técnico de aplicación 1",
-      "Consejo cultural o técnico de aplicación 2",
-      "Consejo cultural o técnico de aplicación 3"
-    ]
-  }`;
+${catalogoLista}
+
+REGLAS ESTRICTAS:
+1. Solo recomienda productos que aparezcan EXACTAMENTE en la lista anterior (copia el nombre exacto).
+2. Recomienda entre 2 y 4 productos del catálogo, los más apropiados.
+3. Responde ÚNICAMENTE con JSON válido, sin Markdown ni texto extra.
+Estructura:
+{
+  "planta":"Nombre cultivo",
+  "condicion":"Nombre enfermedad/plaga/deficiencia",
+  "estado_icono":"emoji",
+  "severidad":número 1-100,
+  "diagnostico":"Explicación clara y profesional",
+  "productos_recomendados":[{"nombre":"NOMBRE EXACTO DEL CATÁLOGO","razon":"por qué usarlo"}],
+  "consejos":["consejo 1","consejo 2","consejo 3"]
+}`;
 
   try{
-    let messagesContent = [];
-    if(type === 'image') {
-      messagesContent = [
-        { "type": "text", "text": "Diagnostica visualmente esta planta afectada y devuelve la estructura JSON solicitada." },
-        { "type": "image_url", "image_url": { "url": `data:${imgMime};base64,${imgBase64}` } }
-      ];
-    } else {
-      messagesContent = [
-        { "type": "text", "text": `El agricultor describe los siguientes síntomas: "${userContent}". Por favor, diagnostica y devuelve la estructura JSON.` }
-      ];
-    }
+    const messagesContent = type==='image'
+      ? [{type:'text',text:'Diagnostica esta planta y devuelve JSON.'},{type:'image_url',image_url:{url:`data:${imgMime};base64,${imgBase64}`}}]
+      : [{type:'text',text:`Síntomas: "${userContent}". Diagnostica y devuelve JSON.`}];
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.href || 'https://agronaranjito.local', 
-        'X-OpenRouter-Title': 'AgroNaranjito App'
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{
+        'Authorization':`Bearer ${OPENROUTER_KEY}`,
+        'Content-Type':'application/json',
+        'HTTP-Referer':window.location.href||'https://agronaranjito.local',
+        'X-OpenRouter-Title':'AgroNaranjito'
       },
-      body: JSON.stringify({
-        model: 'openai/gpt-4o-mini', // Modelo balanceado multimodal para leer texto e imágenes de forma veloz
-        response_format: { type: "json_object" }, // Forzar formato JSON nativo si el modelo lo soporta
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: messagesContent }
-        ]
+      body:JSON.stringify({
+        model:'openai/gpt-4o-mini',
+        response_format:{type:'json_object'},
+        messages:[{role:'system',content:systemPrompt},{role:'user',content:messagesContent}]
       })
     });
-
-    if(!response.ok) throw new Error('Error en OpenRouter API: ' + response.status);
-    const resultData = await response.json();
-    
-    if(!resultData.choices || resultData.choices.length === 0) {
-      throw new Error("No se recibió respuesta válida del motor de Inteligencia Artificial.");
-    }
-
-    const aiTextResponse = resultData.choices[0].message.content;
-    const jsonParsed = JSON.parse(aiTextResponse);
-
+    if(!res.ok) throw new Error('API error: '+res.status);
+    const data = await res.json();
+    if(!data.choices||!data.choices[0]) throw new Error('Sin respuesta de IA');
+    const parsed = JSON.parse(data.choices[0].message.content);
     showLoad(false);
-    renderResult(jsonParsed, type==='image'?document.getElementById('prev-img').src:null);
+    renderResult(parsed, type==='image'?document.getElementById('prev-img').src:null);
   }catch(e){
     showLoad(false);
-    alert('❌ Error al procesar el diagnóstico:\n'+e.message+'\n\nAsegúrate de tener saldo en tu cuenta de OpenRouter o que la clave sea válida.');
-    console.error(e);
+    alert('❌ Error: '+e.message);
   }
 }
 
-function renderResult(r,imgSrc){
-  document.getElementById('rimg').innerHTML=imgSrc
+function renderResult(r, imgSrc){
+  document.getElementById('rimg').innerHTML = imgSrc
     ?`<img src="${imgSrc}" style="width:100%;max-height:190px;object-fit:cover;display:block">`:'';
-
   document.getElementById('rbadge').textContent=(r.estado_icono||'🔍')+' Diagnóstico IA';
   document.getElementById('rplant').textContent=r.planta||'Planta analizada';
   document.getElementById('rcond').textContent=r.condicion||'';
-
   const sev=r.severidad||50;
   const sc=sev<30?'sev-low':sev<65?'sev-mid':'sev-high';
-  document.getElementById('rhero').style.background=
-    sev>=65?'var(--danger)':sev>=30?'#b07d00':'var(--green)';
+  document.getElementById('rhero').style.background=sev>=65?'var(--danger)':sev>=30?'#b07d00':'var(--green)';
 
   const prods=(r.productos_recomendados||[]);
-  let ph='<div class="prods">';
+  let ph='';
   prods.forEach((p,i)=>{
-    const top=i===0;
-    ph+=`<div class="prod ${top?'top':''}">
-      ${top?'<span class="pbadge">⭐ Principal</span>':''}
-      <div class="pname">${prodIcon(p.nombre)} ${p.nombre}</div>
-      <div class="preason">${p.razon}</div>
+    const catalogItem = CATALOGO.find(c=>c.nombre.toLowerCase()===p.nombre.toLowerCase())
+      || CATALOGO.find(c=>c.nombre.toLowerCase().includes(p.nombre.toLowerCase().split(' ')[0]));
+    const stock = catalogItem ? catalogItem.stock : -1;
+    const precio = catalogItem ? catalogItem.precio : null;
+    const nombreReal = catalogItem ? catalogItem.nombre : p.nombre;
+
+    let stockHtml = '';
+    if(stock===0) stockHtml=`<span class="pstock-none">⛔ Sin stock</span>`;
+    else if(stock>0&&stock<=3) stockHtml=`<span class="pstock-low">⚠️ Stock bajo (${stock})</span>`;
+    else if(stock>3) stockHtml=`<span class="pstock-ok">✅ Disponible (${stock})</span>`;
+
+    ph+=`<div class="prod-rec">
+      <div class="prod-rec-top">
+        <div class="ci-icon" style="width:38px;height:38px;flex-shrink:0">${prodIcon(nombreReal)}</div>
+        <div class="prod-rec-info">
+          ${i===0?'<div class="pbadge-top">⭐ Principal</div>':''}
+          <div class="pname">${nombreReal}</div>
+          <div class="preason">${p.razon}</div>
+          ${precio!==null?`<div class="pprice">$${precio}</div>`:''}
+          ${stockHtml}
+        </div>
+      </div>
+      <button class="btn-add ${stock===0?'nostock':isInCart(nombreReal)?'added':'add'}"
+        data-prod-btn="${nombreReal}" data-stock="${stock}"
+        onclick="${stock>0?`addToCart('${nombreReal.replace(/'/g,"\\'")}',${precio})`:''}"
+        ${stock===0?'disabled':''}>
+        ${stock===0?'Sin stock':isInCart(nombreReal)?'✅ En carrito':'➕ Agregar al carrito'}
+      </button>
     </div>`;
   });
-  ph+='</div>';
 
   const tips=(r.consejos||[]);
   let th='<div class="tips">';
-  tips.forEach((t,i)=>{
-    th+=`<div class="tip"><div class="tipdot">${['1️⃣','2️⃣','3️⃣'][i]||'•'}</div><span>${t}</span></div>`;
-  });
+  tips.forEach((t,i)=>{th+=`<div class="tip"><div class="tipdot">${['1️⃣','2️⃣','3️⃣'][i]||'•'}</div><span>${t}</span></div>`;});
   th+='</div>';
 
   document.getElementById('rbody').innerHTML=`
@@ -464,8 +718,11 @@ function renderResult(r,imgSrc){
       <div style="font-size:11px;color:var(--muted);display:flex;justify-content:space-between"><span>Severidad</span><span style="font-weight:800">${sev}%</span></div>
     </div>
     <div class="rcard">
-      <div class="rctitle">🛒 Productos recomendados</div>
+      <div class="rctitle">🛒 Productos de AgroNaranjito</div>
       ${ph}
+      <button class="btn-wsp" style="margin-top:10px" onclick="goTo('cart')">
+        Ver carrito →
+      </button>
     </div>
     <div class="rcard">
       <div class="rctitle">💡 Consejos de aplicación</div>
@@ -476,21 +733,9 @@ function renderResult(r,imgSrc){
   goTo('result');
 }
 
-function saveWorker(){
-  const key=document.getElementById('worker-url').value.trim();
-  const st=document.getElementById('config-status');
-  if(!key){
-    st.style.color='var(--danger)';st.textContent='⚠️ Por favor escribe una clave válida.';return;
-  }
-  OPENROUTER_KEY = key;
-  localStorage.setItem('agro_openrouter_key', key);
-  st.style.color='green';
-  st.textContent='✅ Token de OpenRouter guardado internamente.';
-}
-
 window.onload=()=>{
-  checkWorkerWarn();
   setTimeout(()=>document.getElementById('splash').classList.add('hide'),1600);
+  updateCartBadge();
 };
 </script>
 </body>
